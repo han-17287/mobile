@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>환장 RPG — 정상 영업 안 합니다</title>
+<style>
+:root{--bg:#090d14;--panel:#101925ed;--line:#ffffff1c;--text:#ecf3ee;--muted:#8eaaa6;--lime:#c4f56b;--orange:#ffa369;--red:#ff707d}
+*{box-sizing:border-box}body{margin:0;overflow:hidden;background:var(--bg);color:var(--text);font:14px system-ui,"Malgun Gothic",sans-serif}canvas{display:block}button,input,select{font:inherit}button{cursor:pointer;color:var(--text);background:#20332f;border:1px solid #ffffff25;border-radius:8px;padding:9px 13px}button:hover{background:#37533d;border-color:var(--lime)}button:disabled{opacity:.35;cursor:default}button.primary{background:var(--lime);color:#15200b;font-weight:800}small,.muted{color:var(--muted)}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(42px,6vw,84px);line-height:.98;letter-spacing:-5px}h2{font-size:25px;letter-spacing:-1px}h3{font-size:16px}label{cursor:pointer}
+#hud{position:fixed;inset:0;pointer-events:none}.panel{background:var(--panel);border:1px solid var(--line);border-radius:13px;box-shadow:0 14px 45px #0004;backdrop-filter:blur(12px)}#status{position:absolute;top:23px;left:24px;width:285px;padding:18px}.eyebrow{font-size:10px;letter-spacing:3px;color:var(--lime);text-transform:uppercase}.statusHead{display:flex;justify-content:space-between;align-items:center;margin:8px 0 14px}#jobName{font-size:21px;font-weight:900}#level{color:var(--lime)}.bar{height:7px;background:#ffffff12;border-radius:4px;overflow:hidden;margin:5px 0 10px}.fill{height:100%;transition:width .12s;background:var(--lime)}.barLabel{display:flex;justify-content:space-between;font-size:11px;color:#bbccc7}#hpBar{background:#f17982}#mpBar{background:#67b8f5}#xpBar{background:var(--lime)}#divBar{background:#f4d574}
+#region{position:absolute;right:25px;top:25px;width:255px;padding:19px}#region h3{font-size:20px;margin:9px 0}#questText{font-size:12px;line-height:1.8;color:#c9d4ce}#badge{position:absolute;top:27px;left:50%;transform:translateX(-50%);text-align:center;font-size:12px;letter-spacing:3px;color:#d6e4d8}#badge span{display:block;font-size:10px;letter-spacing:2px;color:#88a097;margin-top:6px}#help{position:absolute;right:25px;bottom:24px;line-height:1.9;font-size:11px;color:#a1b4ad;text-align:right}kbd{font:11px monospace;padding:3px 6px;background:#ffffff0c;border:1px solid #ffffff1a;border-radius:4px;color:#dceadd}
+#skillbar{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);display:flex;gap:7px;pointer-events:auto}.slot{width:65px;height:73px;border:1px solid #bedf9b40;border-radius:10px;background:#111c23ed;position:relative;overflow:hidden;padding:6px;text-align:center;cursor:pointer}.slot:hover{border-color:var(--lime)}.slot .num{font-size:10px;color:#92a293;position:absolute;top:5px;left:6px}.slot .icon{font-size:21px;display:block;margin-top:7px;color:var(--lime)}.slot .name{display:block;font-size:9px;margin-top:3px;white-space:nowrap;overflow:hidden}.slot .cd{position:absolute;inset:0;background:#071014cc;display:none;align-items:center;justify-content:center;font-size:21px;font-weight:800}
+#logs{position:absolute;bottom:127px;left:24px;width:360px;font-size:11px;line-height:1.9;text-shadow:0 2px 4px #000}#logs div{color:#c1cec5;animation:appear .25s}#prompt{position:absolute;left:50%;top:68%;transform:translate(-50%,-50%);background:#0b141de8;border:1px solid #c4f56b60;border-radius:8px;padding:10px 18px;font-size:13px;display:none}#boss{position:absolute;top:85px;left:50%;transform:translateX(-50%);width:360px;display:none;text-align:center}#boss .bar{height:9px}#bossName{font-size:12px;letter-spacing:2px}#bossFill{background:#ff8c73}#floatLayer{position:absolute;inset:0;overflow:hidden}.damage{position:absolute;font-weight:900;font-size:21px;text-shadow:0 2px 0 #000;transform:translate(-50%,-50%);white-space:nowrap}#flash{position:absolute;inset:0;background:#e6ffc8;opacity:0;transition:opacity .3s}#hurt{position:absolute;inset:0;box-shadow:inset 0 0 140px #ff234a;opacity:0}
+#start{position:fixed;inset:0;z-index:20;background:linear-gradient(90deg,#081018f5 0%,#081018d9 40%,#08101815 100%);display:flex;align-items:center;padding:7vw}.intro{max-width:660px}.intro .eyebrow{margin-bottom:24px}.intro h1 em{font-style:normal;color:var(--lime)}.intro p{line-height:1.9;color:#a9beb5;font-size:15px;max-width:480px}.intro footer{margin-top:34px;display:flex;gap:25px;font-size:11px;color:#80998d}.intro button{margin-top:22px;padding:16px 25px}
+#modal{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;background:#03080bbf;backdrop-filter:blur(5px)}.window{width:min(1060px,94vw);max-height:88vh;overflow:auto;padding:26px;background:#111b23;border:1px solid #aecb9d30;border-radius:16px;box-shadow:0 30px 120px #000a}.windowHead{display:flex;justify-content:space-between;align-items:start;border-bottom:1px solid var(--line);padding-bottom:17px;margin-bottom:18px;gap:20px}.windowHead h2{margin:0}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:16px}.card{border:1px solid var(--line);background:#17242b;border-radius:10px;padding:15px}.card.active{border-color:var(--lime);background:#23332c}.card.locked{opacity:.6}.card p{font-size:12px;line-height:1.7;color:#a4b9af;margin:8px 0 12px}.card h3{margin-bottom:5px}.card small{font-size:10px;line-height:1.6}.card button{font-size:11px;padding:7px 9px;margin:4px 3px 0 0}.tabs{display:flex;gap:6px;flex-wrap:wrap}.tabs button{font-size:11px;padding:6px 10px}.tabs button.active{background:var(--lime);color:#15200b}.notice{padding:12px;background:#c4f56b0a;border-left:3px solid var(--lime);font-size:12px;color:#b9cbbd;line-height:1.8;margin:15px 0}
+#math{position:fixed;inset:0;z-index:40;background:#051018dc;display:none;align-items:center;justify-content:center}.mathbox{width:420px;text-align:center;padding:35px}#equation{font:800 40px monospace;color:var(--lime);margin:25px 0}#answer{background:#071218;border:1px solid #b9e28850;border-radius:7px;width:100%;padding:14px;color:white;text-align:center;font-size:25px}#mathResult{min-height:25px;font-size:12px;color:var(--muted);margin-top:10px}#loadError{position:fixed;bottom:10px;left:10px;color:#ff9292;background:#161b24;padding:15px;z-index:100;display:none}@keyframes appear{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}@media(max-width:1000px){#badge{display:none}#help{display:none}#status{width:230px;left:12px;top:12px}#region{right:12px;top:12px;width:205px}.slot{width:52px;height:65px}#logs{width:270px;font-size:10px;bottom:110px}}
+</style>
+</head><body>
+<div id="hud">
+<div id="badge">HWANJANG / ONLINE<span>정상적인 모험은 취급하지 않습니다</span></div>
+<section id="status" class="panel"><div class="eyebrow">ADVENTURER LICENSE · NO. 0001</div><div class="statusHead"><span id="jobName">초보자</span><b id="level">Lv. 1</b></div>
+<div class="barLabel"><span>생명력</span><span id="hpText"></span></div><div class="bar"><div class="fill" id="hpBar"></div></div>
+<div class="barLabel"><span>마나</span><span id="mpText"></span></div><div class="bar"><div class="fill" id="mpBar"></div></div>
+<div class="barLabel"><span>경험치</span><span id="xpText"></span></div><div class="bar"><div class="fill" id="xpBar"></div></div>
+<div id="divineUI" style="display:none"><div class="barLabel"><span>신성력</span><span id="divText"></span></div><div class="bar"><div class="fill" id="divBar"></div></div></div>
+<div class="barLabel"><span id="goldText"></span><span id="buffText"></span></div></section>
+<section id="region" class="panel"><div class="eyebrow">CURRENT DESTINATION</div><h3 id="areaName"></h3><small id="areaDesc"></small><div style="border-top:1px solid var(--line);margin:15px 0 10px"></div><div class="eyebrow">QUEST / 모험에는 사정이 있다</div><p id="questText"></p></section>
+<div id="boss"><div id="bossName"></div><div class="bar"><div class="fill" id="bossFill"></div></div></div><div id="logs"></div><div id="prompt"></div><div id="skillbar"></div>
+<div id="help"><kbd>WASD</kbd> 이동　<kbd>우클릭 드래그</kbd> 카메라<br><kbd>좌클릭</kbd> 공격　<kbd>Space</kbd> 회피　<kbd>E</kbd> 대화<br><kbd>K</kbd> 스킬　<kbd>J</kbd> 전직　<kbd>I</kbd> 가방　<kbd>M</kbd> 지도</div>
+<div id="floatLayer"></div><div id="hurt"></div><div id="flash"></div></div>
+<div id="start"><div class="intro"><div class="eyebrow">A VERY UNREASONABLE ADVENTURE</div><h1>환장 <em>RPG.</em><br>취업부터<br>잘못됐다.</h1><p>토끼 간 열 개만 구하면 된다고 했다.<br>그런데 옆집 마법사는 수학을 풀고, 힐러는 수술 동의서를 받는다.<br>당신의 모험도 아마 정상은 아닐 것이다.</p><button class="primary" id="startButton">모험 시작하기　↗</button><button id="resetButton">저장 초기화</button><footer><span>28개 직업 단계</span><span>8개 지역</span><span>계산하는 마법사</span></footer><p style="font-size:11px;margin-top:22px">PC · 마우스/키보드 · 자동 저장 · ★ 제공 설정 / ☆ 추가 설정</p></div></div>
+<div id="modal"><div class="window" id="window"></div></div>
+<div id="math"><form class="panel mathbox" id="mathForm"><div class="eyebrow">MAGIC COMPUTATION</div><h2 id="mathName"></h2><small>정답과 풀이 속도가 마법 위력을 결정합니다.</small><div id="equation"></div><input id="answer" autocomplete="off" inputmode="numeric" placeholder="정답 입력"><div id="mathResult"></div><button class="primary" type="submit">연산 완료</button><button type="button" id="cancelMath">취소</button></form></div>
+<div id="loadError">Three.js를 불러오지 못했습니다. 인터넷 연결과 CDN 접근을 확인하세요.</div>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js';
+/* DATA: 스킬 행 = 이름|종류|MP|쿨타임|배율|효과 키 */
+const TYPES={melee:'근접',projectile:'원거리투사체',area:'범위',buff:'버프',debuff:'디버프',summon:'소환',move:'이동기',heal:'회복',passive:'패시브'};
+const DATA={jobs:[
+['novice','초보자','기초',false,0xc4f56b,'☆ 아직 아무것도 잘못되지 않았다.'],
+['warrior','전사','전투',false,0xe6a06c,'★ 전사의 자격대. 초보자들의 무덤.'],
+['mage','마법사','전투',false,0x81b9ff,'★ 마법은 연산이다. 계산기 반입 금지.'],
+['archer','궁수','전투',false,0xa5d982,'★ 멀리서 쏘면 덜 아프다. 본인만.'],
+['thief','도적','전투',false,0xa996df,'★ 범죄도 숙련도가 필요하다. 은신은 2차 전직.'],
+['ninja','닌자','전투',false,0x7f99b0,'★ 도적과 별개의 직업. ☆ 표창 사용.'],
+['fighter','무투가','전투',false,0xf3b191,'☆ 주먹은 장비 내구도가 없다.'],
+['lancer','창술사','전투',false,0x72ccc4,'★ 희귀 직업. 너무 가까운 적에게 약하다.'],
+['priest','성직자','전투',false,0xffdf86,'★ 선행·설교·성직자 장비로 신성력 획득.'],
+['alchemist','연금술사','전투',false,0x91d9a0,'★ 휘젓개로 제조. 재료도 시간도 많이 든다.'],
+['warlock','흑마법사','전투',false,0xaf7de1,'★ 마법사 파생. 마법 연산 면제.'],
+['necro','네크로맨서','전투',false,0x8dd6ba,'★ 사람 시체에는 유족 합의금이 붙는다.'],
+['tamer','테이머','전투',false,0xdbb37e,'★ 동물이 없으면 테이밍 외 동물 스킬 사용 불가.'],
+['gunner','포수','전투',false,0x849fae,'☆ 직업 추가. ★ 와일드 캐논.'],
+['chef','요리사','일반',false,0xf6d9b4,'★ 어슷썰기와 깍둑썰기로 사냥한다.'],
+['smith','대장장이','일반',false,0xc79a7a,'★ 수리 숙련도가 낮으면 무기를 부순다.'],
+['farmer','농부','일반',false,0xb9cf7c,'☆ 오늘 심은 것은 내일의 전리품.'],
+['doctor','의사','일반',false,0x8ed8d7,'★ 성직자에게 밀린 비인기 힐러.'],
+['sucker','호구','일반',false,0xeac58b,'★ 물건을 더 비싸게 산다. 재능이다.'],
+['crybaby','울보','일반',false,0x91caff,'★ 존재. ☆ 울어서 싸운다.'],
+['hold','존버맨','일반',false,0xc0b8a8,'★ 초보자로 만렙이면 박수받는다.'],
+['football','축구선수','중급',false,0xeaeaca,'★ 날아라 슛돌이.'],
+['super','초 초보자','히든',true,0xc4f56b,'★ 모든 직업 스킬 습득·영구 소모 융합. 빈약한 장비.'],
+['supersuper','초초 초보자','히든',true,0xe9ffae,'★ 2차 전직. 히든 조건으로 스킬 진화.'],
+['magicblade','마검사','히든',true,0xc18eff,'★ 마법과 검술 모두 어정쩡하게 어렵다.'],
+['vampire','뱀파이어','히든',true,0xd96a88,'★ 전 능력치 +200%. 밝은 구역 진입 즉사.'],
+['powerarcher','파워 아처','히든',true,0xeec269,'★ 전사 스킬 습득 후 궁수 전직. 활로 때린다.'],
+['delivery','치킨 배달부','히든',true,0xffb95b,'☆ 치킨보다 빠르게 달려갑니다.'],
+['error','시스템 오류','히든',true,0x75f3dd,'☆ 명세서에 없는데 작동한다.']
+].map(([id,name,group,hidden,color,desc])=>({id,name,group,hidden,color,desc})),skills:[],areas:[
+{id:'town',name:'시작의 마을',mark:'★',level:1,desc:'주민의 부탁부터 들어보자.',color:0x64877c,sky:0x233b42,bright:true,mobs:[],boss:null,respawn:0,drops:'훈련·상점·퀘스트'},
+{id:'rabbit',name:'토끼 사냥터',mark:'★',level:1,desc:'귀엽다고 약하다는 보장은 없다.',color:0x527d5b,sky:0x243b36,bright:true,mobs:['rabbit'],boss:'jackalope',respawn:9,drops:'토끼 간 · 약초'},
+{id:'deer',name:'사슴고원',mark:'★',level:8,desc:'녹용은 합의하에 가져갈 수 없다.',color:0x8a8961,sky:0x3d453b,bright:true,mobs:['deer','rabbit'],boss:'deerking',respawn:12,drops:'녹용 · 사슴고기'},
+{id:'ship',name:'부서진 전함터',mark:'★',level:18,desc:'☆ 전함은 부서졌고 고용 계약도 부서졌다.',color:0x516675,sky:0x18232e,bright:false,mobs:['skeleton','crab'],boss:'captain',respawn:12,drops:'고철 · 뼛조각'},
+{id:'ice',name:'얼음지대 외곽',mark:'★',level:30,desc:'☆ 손이 시린 건 장비 탓이다.',color:0x97b8bd,sky:0x536d81,bright:true,mobs:['icewolf','golem'],boss:'iceking',respawn:14,drops:'얼음 결정'},
+{id:'dragon',name:'최고 사냥터',mark:'★',level:55,desc:'최대 유저 레벨 60. ★ 드래곤 Lv.80.',color:0x5b4558,sky:0x221b30,bright:false,mobs:['drake'],boss:'dragon',respawn:20,drops:'용 비늘'},
+{id:'popcorn',name:'팝콘 극장',mark:'☆',level:12,desc:'팝콘은 리필되지만 목숨은 아닙니다.',color:0x827050,sky:0x292039,bright:false,mobs:['popcorn'],boss:'bucket',respawn:10,drops:'팝콘 · 소금'},
+{id:'grave',name:'초보자의 무덤 던전',mark:'☆',level:5,desc:'전사의 자격대. 수강료는 체력.',color:0x535b57,sky:0x1c2829,bright:false,mobs:['failed','skeleton'],boss:'examiner',respawn:10,drops:'훈련 증서 · 고철'}
+],monsters:[
+['rabbit','토끼',1,45,7,3.4,'토끼 간',0xf0e8d2,'rabbit'],
+['jackalope','사슴토끼',5,480,18,4.5,'토끼 간',0xd9bc89,'rabbit',true],
+['deer','사슴',8,130,18,4,'녹용',0xb59467,'deer'],
+['deerking','고원 사슴왕',12,1200,30,4,'사슴고기',0xc2a66b,'deer',true],
+['skeleton','불법 취업 해골',18,210,27,3,'뼛조각',0xc3d0c6,'skeleton'],
+['crab','전함 집게',20,290,31,2.5,'고철',0x8296ab,'crab'],
+['captain','퇴사 못 한 함장',25,2200,42,3.6,'고철',0x9eb8c9,'skeleton',true],
+['icewolf','얼음늑대',30,440,43,5.3,'얼음 결정',0xc6eeff,'wolf'],
+['golem','냉장고 골렘',34,750,56,2,'얼음 결정',0x91c7dd,'golem'],
+['iceking','냉동실 관리자',40,3800,65,3,'얼음 결정',0x95defa,'golem',true],
+['drake','야근 드레이크',55,1100,73,4,'용 비늘',0x9e759b,'dragon'],
+['dragon','드래곤',80,12500,140,4.2,'용 비늘',0xd17c88,'dragon',true],
+['popcorn','팝콘',12,180,19,3.5,'팝콘',0xffe2a0,'popcorn'],
+['bucket','특대 사이즈',18,1700,32,3,'소금',0xf7cd80,'popcorn',true],
+['failed','탈락한 초보자',5,85,13,3.2,'훈련 증서',0x879f90,'skeleton'],
+['examiner','자격대 감독관',10,950,25,3.8,'훈련 증서',0xbbad87,'golem',true]
+].map(([id,name,level,hp,atk,speed,drop,color,shape,boss=false])=>({id,name,level,hp,atk,speed,drop,color,shape,boss}))};
+function addSkills(job,table){table.trim().split('\n').forEach(line=>{const[name,type,mp,cool,mult,effect]=line.trim().split('|');const id=job+':'+name.replace(/[★☆]/g,'');DATA.skills.push({id,name,job,type,mp:+mp,cool:+cool,mult:+mult,effect:c=>perform(effect||type,c),effectKey:effect||type});});}
+addSkills('novice',`
+☆초보자 강타|melee|0|2|1.5|melee
+☆응급처치|heal|10|9|1|heal
+☆몸풀기|buff|8|12|1|haste
+☆돌멩이|projectile|3|1|1|projectile
+☆엎드리기|move|4|3|0|dodge`);
+addSkills('warrior',`
+★휠 인드|area|18|5|2.3|spin
+★전사의 함성|heal|15|9|1.5|heal
+★헤비 스트라이크|area|25|7|3.5|slam
+★강타|melee|8|2|2.2|melee
+★쉴드|buff|15|10|1|shield
+☆돌진|move|12|5|1.8|charge
+☆도발|debuff|8|8|0|taunt
+☆광폭화|buff|18|14|1|rage
+☆대지 가르기|projectile|20|6|2.8|pierce
+☆방패 밀치기|melee|10|4|1.8|knock`);
+addSkills('mage',`
+★파이어볼|projectile|15|2|2.5|burn
+★플라잉|move|20|12|0|fly
+★에너지 회복|heal|0|14|1|mana
+★라이트닝|area|10|2|1.8|lightning
+★배리어|buff|20|12|1|shield
+★파이어랜스|projectile|22|4|3|pierce
+★파이어캐논|projectile|30|7|4.2|explode
+★라이트닝볼트|projectile|24|5|3|lightningShot
+★블링크|move|15|6|0|skyblink
+★스프린클|area|6|2|.7|area
+☆아이스 스피어|projectile|18|3|2.2|freeze
+☆메테오|area|48|16|7|meteor
+☆마나 실드|buff|28|14|1|manashield
+☆텔레포트|move|18|5|0|teleport
+☆체인 라이트닝|area|28|6|2.8|chain`);
+addSkills('archer',`
+★더블샷|projectile|10|2|1.4|double
+★레인 에로우|area|25|7|3|rain
+★스나이퍼 샷|projectile|20|6|4|pierce
+★속사|projectile|18|5|1|rapid
+★파워 샷|buff|50|15|1.5|power
+☆트랩 설치|debuff|12|5|1.8|trap
+☆독화살|projectile|12|3|1.4|poisonShot
+☆백스텝 샷|move|12|5|1.6|backshot
+☆매의 눈|buff|15|13|1|crit
+☆폭발 화살|projectile|20|6|2.8|explode`);
+addSkills('thief',`
+★소매치기|melee|8|5|.5|steal
+★럭키샷|melee|12|4|1|lucky
+★은신|buff|15|12|1|stealth
+★함정제거|buff|5|4|1|disarm
+★실루엣 스탭|move|10|4|0|dodge
+★보이스피싱|debuff|12|7|0|confuse
+★빈집털이|buff|8|8|1|burglary
+☆뒤통수 치기|melee|15|6|3|backstab
+☆연막탄|area|15|8|.5|smoke`);
+addSkills('ninja',`
+☆표창 투척|projectile|6|1|1.3|projectile
+☆분신술|summon|25|15|1|clone
+☆그림자 이동|move|12|4|0|teleport
+☆암습|melee|14|5|3|backstab
+☆쿠나이 연사|projectile|18|5|.9|rapid
+☆수리검 폭풍|area|28|8|3.4|spin`);
+addSkills('fighter',`
+☆정권 지르기|melee|5|1|1.7|melee
+☆연타|melee|14|4|3.3|combo
+☆기 모으기|buff|12|10|1|power
+☆승룡 어퍼컷|melee|18|5|2.8|knock
+☆철산고|move|14|5|2.2|charge
+☆발차기 콤보|area|20|6|2.8|spin`);
+addSkills('lancer',`
+★래피드 스피어|melee|15|3|3.5|spear
+☆창 회전|area|18|5|2.5|spin
+☆돌격 찌르기|move|15|5|2.4|charge
+☆창 투척|projectile|16|4|3|pierce
+☆지면 찌르기|area|24|7|3|slam`);
+addSkills('priest',`
+★홀리 웨폰|buff|15|10|1|holyweapon
+★힐|heal|16|5|2|heal
+★홀리 에로우|projectile|14|3|2|holyshot
+★홀리 아머|buff|18|12|1|armor
+★힐링존|heal|25|12|1|healzone
+★홀리몰리|buff|40|25|1|holymoly
+☆정화|heal|14|7|1|cleanse
+☆부활|heal|60|45|1|revive
+☆성스러운 방패|buff|20|14|1|shield
+☆설교|debuff|0|8|0|sermon`);
+addSkills('alchemist',`
+★포션 제조|buff|10|8|1|brew
+☆폭탄 투척|projectile|12|4|2.7|explode
+☆독 플라스크|area|15|5|1.4|poison
+☆연성|buff|20|12|1|synthesis
+☆산성비|area|26|8|3|acid
+☆포션 투척|projectile|14|4|2|potionShot`);
+addSkills('warlock',`
+★스켈레톤 소환|summon|100|12|1|skeleton
+★다크 핸즈|area|70|45|5|darkhands
+☆어둠의 구체|projectile|16|3|2.4|projectile
+☆생명 흡수|area|22|6|2|drain
+☆저주|debuff|16|7|0|curse
+☆그림자 화살|projectile|12|2|1.8|pierce`);
+addSkills('necro',`
+★시체 일으키기|summon|35|8|1|raise
+☆뼈 방패|buff|18|12|1|shield
+☆망령 소환|summon|30|14|1|ghost
+☆죽음의 외침|debuff|20|8|1|fear
+☆유족 안내문|buff|5|15|1|settlement`);
+addSkills('tamer',`
+☆테이밍|summon|15|8|1|tame
+☆펫 강화|buff|15|10|1|petboost
+☆동물 지원 호출|summon|20|12|1|animal
+☆펫과 합체 공격|area|25|7|3.5|petcombo
+☆먹이 주기|heal|8|6|1|feed`);
+addSkills('gunner',`
+★와일드 캐논|summon|35|12|5|cannon
+☆산탄 사격|projectile|15|4|1.6|spread
+☆연발 사격|projectile|18|5|1|rapid
+☆화약 폭발|area|25|7|3.5|slam
+☆대포 재장전|buff|10|10|1|reload`);
+addSkills('chef',`
+★어슷썰기|melee|5|1.5|1.8|melee
+★깍둑썰기|melee|12|4|3|combo
+★반죽포박|debuff|15|5|0|root
+☆요리 버프|buff|12|12|1|food
+☆칼 던지기|projectile|8|2|1.7|projectile
+☆소금 뿌리기|area|10|5|1|salt
+☆불맛 입히기|area|22|7|2.8|firearea`);
+addSkills('smith',`
+★장비 수리|buff|5|8|1|repair
+☆무기 강화|buff|18|15|1|upgrade
+☆단조|area|15|5|2.5|slam
+☆망치 던지기|projectile|12|4|2.4|knockShot
+☆제련|buff|10|10|1|smelt`);
+addSkills('farmer',`
+☆작물 재배|summon|8|8|1|plant
+☆괭이질|melee|5|2|1.8|melee
+☆비료 투척|area|12|5|1.6|poison
+☆허수아비 소환|summon|18|12|1|scarecrow
+☆풍작|buff|15|15|1|harvest`);
+addSkills('doctor',`
+☆치료|heal|12|5|1.6|heal
+☆주사 공격|projectile|8|2|1.7|poisonShot
+☆수술|heal|25|12|4|surgery
+☆진단|debuff|8|6|0|diagnose
+☆응급 봉합|heal|18|8|2|cleanse`);
+addSkills('sucker',`
+☆동정표|buff|8|10|1|pity
+☆바가지 맞기|buff|5|8|1|overpay
+☆호구 인증|buff|12|14|1|reverseDrop
+☆영수증 공격|projectile|6|2|1.3|projectile
+☆환불 요청|debuff|10|7|0|confuse`);
+addSkills('crybaby',`
+☆울기|debuff|8|6|0|weaken
+☆눈물 폭탄|projectile|12|4|2.3|explode
+☆통곡|debuff|20|9|0|stun
+☆훌쩍이기|heal|6|5|1|heal
+☆눈물바다|area|25|9|2.5|rain`);
+addSkills('hold',`
+☆존버|passive|0|0|1|hold
+☆버티기|buff|15|25|1|survive
+☆박수 받기|buff|10|15|1|applause
+☆돌부처|buff|12|12|1|armor
+☆기다렸다 때리기|melee|10|5|3|melee`);
+addSkills('football',`
+★날아라 슛돌이|projectile|25|8|4|ball
+☆슈팅|projectile|8|2|1.8|ball
+☆태클|move|12|5|2|charge
+☆프리킥|projectile|18|5|3|pierce
+☆헤딩|melee|10|4|2.3|knock`);
+addSkills('super',`
+★스킬 융합|passive|0|0|1|fusion
+★칼집 던지기|projectile|0|2|1.2|projectile
+★패리|buff|5|3|1|parry
+★강타|melee|8|2|2.2|melee
+★쉴드|buff|15|10|1|shield
+★분노|buff|15|12|1|rage
+★분노한 척 연기하기|buff|3|5|1|act
+☆맨주먹 박치기|melee|8|4|2.6|recoil
+☆도망치기|move|4|3|0|dodge
+★동물 변신|buff|15|15|1|transform
+☆초보자의 오기|passive|0|0|1|grit`);
+addSkills('supersuper',`
+★카운터 패리|buff|6|3|1|counter
+★분노를 다스리는 마음|passive|0|0|1|calm
+☆초월 박치기|melee|12|4|4|recoil
+☆절대 방벽|buff|30|20|1|absolute
+☆졸업 거부|heal|20|10|2|heal`);
+addSkills('magicblade',`
+☆마검 베기|melee|15|4|2.5|melee
+☆마력 부여|buff|20|12|1|holyweapon
+☆마법 검기|projectile|18|4|2.7|pierce
+☆불완전 배리어|buff|18|10|1|shield
+☆헷갈린 주문|area|20|7|2.8|random`);
+addSkills('vampire',`
+☆흡혈|melee|12|4|2|leech
+☆박쥐 변신|move|15|7|0|fly
+☆혈액 마법|area|25|7|3|drain
+☆야간 강화|passive|0|0|1|night
+☆혈액 보충|heal|20|9|2|heal`);
+addSkills('powerarcher',`
+★파워 보우 스트라이크|melee|15|4|3.5|knock
+☆활 휘두르기|area|12|4|2.3|spin
+☆활 던지기|projectile|15|5|2.8|pierce
+☆근접 속사|melee|18|5|4|combo
+☆활대 방어|buff|15|10|1|shield`);
+addSkills('delivery',`
+☆배달 돌진|move|8|3|2|charge
+☆치킨 던지기|projectile|6|2|2|explode
+☆오토바이 소환|buff|20|12|1|motorcycle
+☆서비스 무|heal|8|6|1.3|heal
+☆30분 보장|buff|15|14|1|haste`);
+addSkills('error',`
+☆버그 사용|debuff|12|5|1|bug
+☆렉 걸기|debuff|18|8|0|stun
+☆롤백|heal|20|15|1|rollback
+☆랜덤 스킬|area|15|5|2.5|random
+☆강제 종료|area|40|25|5|darkhands`);
+/* 상태 / 저장 */
+const $=id=>document.getElementById(id),getJob=id=>DATA.jobs.find(j=>j.id===id);
+const skillMap=new Map(DATA.skills.map(s=>[s.id,s])),monsterMap=new Map(DATA.monsters.map(m=>[m.id,m]));
+const SAVE='hwanjang-rpg-single-v1',MAX_LEVEL=60;
+let P={job:'novice',tier:1,level:1,xp:0,hp:160,mp:130,gold:100,divine:40,learned:[],slots:[],deleted:[],unlocked:['novice'],history:['novice'],bag:{'회복 포션':3,'약초':8,'고철':3},weapon:'초보자 검',durability:100,kills:0,quest:0,thiefXP:0,repairXP:0,parries:0,hits:0,acting:0,blocksAtOne:0,kindness:0,playtime:0,fused:0,parryChain:false,noviceMax:false,evolved:[],area:'town',pet:false};
+try{const raw=JSON.parse(localStorage.getItem(SAVE)||'null');if(raw&&raw.version===1)Object.assign(P,raw.player);}catch{}
+/* 융합 스킬을 먼저 복원한 뒤 습득 목록과 슬롯을 검증합니다. */
+if(P.customSkills)for(const item of P.customSkills){const s={...item,effect:c=>perform(item.effectKey,c)};DATA.skills.push(s);skillMap.set(s.id,s);}
+P.learned=P.learned.filter(id=>skillMap.has(id));
+if(!P.learned.length)P.learned=DATA.skills.filter(s=>s.job==='novice'&&!P.deleted.includes(s.id)).map(s=>s.id);
+if(!P.slots.length)P.slots=P.learned.slice(0,5);
+while(P.slots.length<8)P.slots.push(null);
+for(let i=0;i<8;i++)if(!skillMap.has(P.slots[i]))P.slots[i]=null;
+P.pet=false;P.area=DATA.areas.some(a=>a.id===P.area)?P.area:'town';P.job=getJob(P.job)?P.job:'novice';
+const resumeArea=P.area;
+function save(){if(!started)return;try{localStorage.setItem(SAVE,JSON.stringify({version:1,player:P}));}catch{}}
+function addItem(name,n=1){P.bag[name]=(P.bag[name]||0)+n;}
+function spendItem(name,n){if((P.bag[name]||0)<n)return false;P.bag[name]-=n;return true;}
+function needXP(){return Math.floor(70+P.level*35+P.level*P.level*2);}
+function superJob(){return P.job==='super'||P.job==='supersuper';}
+function maxHP(){return Math.floor((160+P.level*14)*(P.job==='vampire'?3:1));}
+function maxMP(){return Math.floor((130+P.level*7)*(P.job==='vampire'?3:1));}
+function log(text){const node=document.createElement('div');node.textContent='[시스템] '+text;$('logs').appendChild(node);while($('logs').children.length>6)$('logs').firstChild.remove();}
+function saveNotice(){save();log('기억을 저장했습니다. 흑역사도 함께.');}
+
+/* Three.js — 외부 모델/텍스처를 사용하지 않습니다. */
+const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(50,innerWidth/innerHeight,.1,180);
+const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;document.body.prepend(renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xe5f8ff,0x25382c,2.4));
+const sun=new THREE.DirectionalLight(0xffe5bc,2.5);sun.position.set(-15,28,12);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-36,right:36,top:36,bottom:-36,near:.1,far:80});sun.shadow.bias=-.001;scene.add(sun);
+const world=new THREE.Group(),actors=new THREE.Group(),fxRoot=new THREE.Group();scene.add(world,actors,fxRoot);
+const materialCache=new Map(),geo={box:new THREE.BoxGeometry(1,1,1),sphere:new THREE.SphereGeometry(1,10,8),cone:new THREE.ConeGeometry(1,1,7),cylinder:new THREE.CylinderGeometry(1,1,1,10),ring:new THREE.TorusGeometry(1,.035,5,40)};
+function mat(color,emissive=false){const key=color+':'+emissive;if(!materialCache.has(key))materialCache.set(key,new THREE.MeshStandardMaterial({color,roughness:.85,metalness:0,emissive:emissive?color:0,emissiveIntensity:emissive?.65:0}));return materialCache.get(key);}
+function mesh(shape,color,pos=[0,0,0],scale=[1,1,1],parent=world,glow=false){const o=new THREE.Mesh(geo[shape],mat(color,glow));o.position.set(...pos);o.scale.set(...scale);o.castShadow=shape!=='ring';o.receiveShadow=true;parent.add(o);return o;}
+function clearGroup(g){while(g.children.length)g.remove(g.children[0]);}
+const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z),rnd=(a,b)=>a+Math.random()*(b-a),clamp=THREE.MathUtils.clamp;
+const move=V(),aim=V(0,0,-1),player=new THREE.Group();actors.add(player);
+let body,head,weapon,legs=[],cape,animalBody;
+function buildPlayer(){
+ clearGroup(player);legs=[];const color=getJob(P.job).color;
+ body=mesh('box',color,[0,1,0],[.6,.75,.36],player);head=mesh('sphere',0xe9c5a2,[0,1.6,0],[.25,.28,.25],player);mesh('box',0x15212a,[0,1.65,-.2],[.3,.07,.08],player);cape=mesh('box',0x24312c,[0,1,.24],[.65,.85,.08],player);
+ for(const x of [-.18,.18]){legs.push(mesh('box',0x283b40,[x,.38,0],[.22,.65,.25],player));mesh('box',color,[x*2.4,1,0],[.18,.58,.2],player);}
+ weapon=mesh('box',0xe0e6c9,[.48,1,-.35],[.1,.1,.9],player,true);animalBody=mesh('sphere',color,[0,.6,0],[.6,.35,.8],player);animalBody.visible=false;
+}
+buildPlayer();
+let area=DATA.areas[0],enemies=[],corpses=[],summons=[],effects=[],shots=[],fields=[],npcs=[],respawns=[];
+let started=false,modal=null,skillTab=P.job,cd={},buffs={},mathPending=null;
+let clock=0,hitstop=0,shake=0,attackCD=0,dodgeCD=0,dodgeTime=0,air=0;
+let yaw=.45,pitch=.78,rightDrag=false,mouseDown=false,walkPhase=0;
+let spawnSerial=0,scheduled=[],lastRollback={pos:V(),hp:P.hp},rollbackTimer=0,holdTime=0;
+let nearestNPC=null,lastUI=0,lastSave=0,skillSelection=new Set(),mathTimer=0,worldEpoch=0;
+const questBosses=new Set(),keys=new Set(),mouse=new THREE.Vector2(0,0),ray=new THREE.Raycaster(),plane=new THREE.Plane(V(0,1,0),0),targetGround=V(),uiFrames=[];
+let soundEnabled=true;
+function audio(freq=220,duration=.09,type='sine',gain=.045,slide=1){
+ if(!soundEnabled)return;
+ try{audio.ctx??=new(window.AudioContext||window.webkitAudioContext)();const c=audio.ctx;if(c.state==='suspended')c.resume().catch(()=>{});const o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(freq,c.currentTime);o.frequency.exponentialRampToValueAtTime(Math.max(30,freq*slide),c.currentTime+duration);g.gain.setValueAtTime(gain,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+duration);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+duration);o.onended=()=>{o.disconnect();g.disconnect();};}catch{}
+}
+function flash(){$('flash').style.opacity='.65';requestAnimationFrame(()=>requestAnimationFrame(()=>$('flash').style.opacity='0'));}
+function popup(pos,text,color='#fff',big=false){if(uiFrames.length>70){const old=uiFrames.shift();old.node.remove();}const node=document.createElement('div');node.className='damage';node.textContent=text;node.style.color=color;if(big)node.style.fontSize='28px';$('floatLayer').appendChild(node);uiFrames.push({node,pos:pos.clone().add(V(rnd(-.3,.3),1.8,0)),life:1.15,max:1.15});}
+function pulse(pos,color=0xc4f56b,radius=3,life=.4,shape='ring'){const node=mesh(shape,color,[pos.x,.12+pos.y,pos.z],[.1,.1,.1],fxRoot,true);if(shape==='ring')node.rotation.x=Math.PI/2;effects.push({node,life,max:life,radius,shape});}
+function burst(pos,color=0xffdc91,count=9){for(let i=0;i<count;i++){const node=mesh('box',color,[pos.x,pos.y+.7,pos.z],[.1,.1,.1],fxRoot,true);effects.push({node,life:.55,max:.55,velocity:V(rnd(-4,4),rnd(2,5),rnd(-4,4)),particle:true});}}
+function schedule(delay,fn){scheduled.push({at:clock+delay,fn});}
+function buff(name,duration,value=1){buffs[name]={until:clock+duration,value};}
+function has(name){return !!buffs[name]&&buffs[name].until>clock;}
+function learnedEffect(name){return P.learned.some(id=>skillMap.get(id)?.effectKey===name);}
+function speed(){let s=P.job==='delivery'?10:6.2;if(P.job==='vampire')s*=3;if(has('haste')||has('motorcycle'))s*=1.6;if(has('fish'))s*=.35;if(has('slow'))s*=.5;return s;}
+function attackPower(){let a=15+P.level*3;if(P.job==='vampire')a*=3;if(P.weapon==='부서진 무기')a*=.45;if(superJob())a*=.8;if(has('power'))a*=1.5;if(has('rage'))a*=1.65;if(has('holyweapon'))a*=1.3;if(has('holymoly'))a*=1.5;if(has('food'))a*=1.2;if(has('upgrade'))a*=1.4;if(learnedEffect('calm'))a*=1.15;if(learnedEffect('fusionAtk'))a*=1.1;if(learnedEffect('grit'))a*=1+(1-P.hp/maxHP())*.8;if(P.job==='vampire'&&!area.bright)a*=1.2;return a;}
+function heal(amount){P.hp=Math.min(maxHP(),P.hp+amount);popup(player.position,'+'+Math.floor(amount),'#aff898');}
+function gainXP(n){
+ if(P.level>=MAX_LEVEL)return;if(has('applause'))n*=1.5;P.xp+=Math.floor(n);
+ while(P.level<MAX_LEVEL&&P.xp>=needXP()){P.xp-=needXP();P.level++;P.hp=maxHP();P.mp=maxMP();pulse(player.position,0xc4f56b,4,.8);audio(550,.25,'triangle',.05,1.8);log('레벨 '+P.level+'! 통계적으로 조금 덜 약해졌습니다.');if(P.level===MAX_LEVEL&&P.history.every(j=>j==='novice')){P.noviceMax=true;unlock('hold');log('초보자로 만렙! 전 서버에서 박수를 보냅니다. 짝짝짝.');}}
+ checkUnlocks();
+}
+function unlock(id){if(!P.unlocked.includes(id)){P.unlocked.push(id);log('히든 해금: '+getJob(id).name);audio(660,.3,'triangle',.06,1.5);}}
+function checkUnlocks(){
+ if(P.quest>=1)unlock('super');if(P.level>=12&&P.history.includes('mage')&&P.history.includes('warrior'))unlock('magicblade');if(P.level>=18&&P.bag['용 비늘'])unlock('vampire');if(P.history.includes('warrior')&&P.job==='archer'&&P.learned.some(id=>skillMap.get(id)?.job==='warrior'))unlock('powerarcher');if(P.kindness>=3&&P.level>=10)unlock('delivery');if(P.fused>=3)unlock('error');if(P.level>=20&&P.fused>=1&&P.parries>=3)unlock('supersuper');checkEvolution();
+}
+function checkEvolution(){
+ if(P.job!=='supersuper')return;
+ function evolve(oldName,newName,condition){if(!condition||P.evolved.includes(newName))return;const old=P.learned.find(id=>skillMap.get(id)?.name.replace(/[★☆]/g,'')===oldName),next=DATA.skills.find(s=>s.name.replace(/[★☆]/g,'')===newName);if(!old||!next)return;P.learned=P.learned.filter(id=>id!==old);if(!P.learned.includes(next.id))P.learned.push(next.id);P.slots=P.slots.map(id=>id===old?next.id:id);P.evolved.push(newName);log('스킬 진화: '+oldName+' → '+newName);flash();}
+ evolve('패리','카운터 패리',P.parryChain);evolve('분노한 척 연기하기','분노를 다스리는 마음',P.acting>=5);evolve('파이어볼','메테오',P.kills>=100);evolve('쉴드','절대 방벽',P.blocksAtOne>=10);
+}
+
+/* 지역 / 기본 도형 월드 */
+function addNPC(name,x,z,color,kind){const g=new THREE.Group();world.add(g);g.position.set(x,0,z);mesh('cylinder',color,[0,.85,0],[.38,1.25,.38],g);mesh('sphere',0xf0caa3,[0,1.65,0],[.28,.3,.28],g);mesh('cone',color,[0,2,0],[.45,.35,.45],g);const beacon=mesh('cone',0xc4f56b,[0,2.65,0],[.13,.3,.13],g,true);beacon.rotation.z=Math.PI;npcs.push({name,pos:g.position,kind,g});}
+function building(x,z,color,w=4,h=3){mesh('box',color,[x,h/2,z],[w,h,3]);const roof=mesh('cone',0x2b3a39,[x,h+.7,z],[w*.85,1.5,2.5]);roof.rotation.y=Math.PI/4;mesh('box',0x152a2a,[x,.9,z-1.53],[.9,1.8,.1]);for(const side of [-1,1])mesh('box',0xe7ce83,[x+side*w*.3,1.8,z-1.55],[.55,.65,.08],world,true);}
+function tree(x,z,color){const g=new THREE.Group();world.add(g);g.position.set(x,0,z);g.scale.setScalar(rnd(.85,1.6));mesh('cylinder',0x5c5740,[0,.9,0],[.15,1.8,.15],g);mesh('cone',color,[0,2.1,0],[1.05,2.6,1.05],g);mesh('cone',color,[0,3,0],[.8,1.8,.8],g);}
+function enterArea(id){
+ worldEpoch++;area=DATA.areas.find(a=>a.id===id)||DATA.areas[0];P.area=area.id;clearGroup(world);clearGroup(fxRoot);for(const e of enemies)actors.remove(e.g);for(const s of summons)actors.remove(s.g);enemies=[];summons=[];corpses=[];effects=[];shots=[];fields=[];npcs=[];respawns=[];scheduled=[];P.pet=false;buffs={};dodgeTime=0;air=0;mouseDown=false;nearestNPC=null;
+ scene.background=new THREE.Color(area.sky);scene.fog=new THREE.Fog(area.sky,30,85);mesh('box',area.color,[0,-.3,0],[72,.6,72]);mesh('box',area.id==='town'?0x9b9a77:area.color,[0,.015,0],[5,.04,65]);mesh('box',area.id==='town'?0x9b9a77:area.color,[0,.018,0],[65,.04,5]);
+ for(let i=0;i<55;i++){const x=rnd(-34,34),z=rnd(-34,34);if(Math.abs(x)<5||Math.abs(z)<5)continue;if(['town','rabbit','deer'].includes(area.id))tree(x,z,area.id==='deer'?0x7a8951:0x315a48);else if(area.id==='ice'){const rock=mesh('cone',0xc6e6e8,[x,1,z],[rnd(.4,1),rnd(1,3),rnd(.4,1)]);rock.rotation.z=rnd(-.2,.2);}else if(area.id==='ship'){const rock=mesh('box',0x455565,[x,.5,z],[rnd(.5,2),rnd(.4,1.5),rnd(.5,3)]);rock.rotation.y=rnd(0,6);}else if(area.id==='popcorn')mesh('sphere',0xe8cf90,[x,.4,z],[.5,.5,.5]);else mesh('box',0x54616a,[x,.5,z],[.6,1,.4]);}
+ if(area.id==='town'){building(-9,-8,0x677c70,5,3);building(10,-8,0x637985,5,4.5);building(-12,8,0x927a65,5,3);building(11,9,0x7b7180,5,3.5);building(0,-17,0xaaa387,6,5);addNPC('마을 이장',-6,-4,0xbbae78,'chief');addNPC('훈련관',5,-4,0x85a786,'trainer');addNPC('전직 안내원',0,-12,0xaaa0d6,'jobs');addNPC('바가지 상인',-8,5,0xe6bc78,'shop');addNPC('설교하는 성직자',8,5,0xf0d996,'sermon');addNPC('도움이 필요한 주민',0,10,0x82c6bc,'help');addNPC('수상한 빈집',-16,-3,0x8e8a83,'empty');addNPC('사체업자',16,-3,0x9bb7b1,'corpse');pulse(V(0,0,18),0xc4f56b,2,99999);addNPC('사냥터 이동문',0,18,0xb3dc7e,'map');}
+ else{for(let i=0;i<11;i++)spawnEnemy(area.mobs[i%area.mobs.length],randomSpawn());spawnEnemy(area.boss,V(0,0,-19));addNPC('귀환 안내석',0,27,0xb1d998,'return');}
+ player.position.set(0,0,area.id==='town'?4:20);lastRollback={pos:player.position.clone(),hp:P.hp};rollbackTimer=0;log(area.mark+' '+area.name+' 진입. 권장 Lv.'+area.level);if(started&&P.job==='vampire'&&area.bright){P.hp=0;log('햇빛입니다. 뱀파이어의 근로 환경이 아닙니다.');die();}save();
+}
+function randomSpawn(){const a=rnd(0,Math.PI*2),r=rnd(7,26);return V(Math.cos(a)*r,0,Math.sin(a)*r);}
+function makeCreature(shape,color,boss=false){
+ const g=new THREE.Group(),s=boss?1.7:1;
+ if(shape==='rabbit'){mesh('sphere',color,[0,.5,0],[.42,.48,.6],g);mesh('sphere',color,[0,.9,-.35],[.3,.3,.3],g);for(const x of [-.14,.14])mesh('box',color,[x,1.35,-.3],[.12,.7,.13],g);}
+ else if(shape==='deer'||shape==='wolf'){mesh('box',color,[0,.9,0],[.65,.65,1.15],g);mesh('box',color,[0,1.35,-.6],[.4,.5,.5],g);for(const x of [-.22,.22])for(const z of [-.4,.4])mesh('box',color,[x,.35,z],[.15,.7,.15],g);if(shape==='deer')for(const x of [-.2,.2]){const horn=mesh('box',0xe7d2a0,[x,1.95,-.5],[.09,.8,.09],g);horn.rotation.z=x*2;}}
+ else if(shape==='dragon'){mesh('sphere',color,[0,1,0],[.8,.7,1.2],g);mesh('box',color,[0,1.5,-1],[.7,.6,.9],g);for(const side of [-1,1]){const wing=mesh('cone',color,[side*1.15,1.5,.15],[1.3,.12,1.1],g);wing.rotation.z=side*.3;mesh('box',0xead0b0,[side*.26,1.95,-1],[.12,.5,.12],g);}mesh('cone',color,[0,.6,1.5],[.25,1.8,.25],g).rotation.x=Math.PI/2;}
+ else if(shape==='popcorn'){for(let i=0;i<5;i++)mesh('sphere',color,[Math.sin(i*2.4)*.28,.55+i*.12,Math.cos(i*2.4)*.28],[.4,.35,.4],g);}
+ else if(shape==='crab'){mesh('sphere',color,[0,.45,0],[.65,.3,.5],g);for(const x of [-.8,.8])mesh('box',color,[x,.45,-.3],[.45,.25,.35],g);}
+ else{mesh('box',color,[0,.85,0],[.6,.9,.4],g);mesh('sphere',color,[0,1.5,0],[.3,.3,.3],g);for(const x of [-.2,.2])mesh('box',color,[x,.3,0],[.2,.6,.2],g);for(const x of [-.45,.45])mesh('box',color,[x,.9,0],[.2,.65,.2],g);}
+ mesh('box',0x20232b,[0,.95,shape==='dragon'?-1.48:-.57],[.25,.07,.08],g);g.scale.setScalar(s);return g;
+}
+function spawnEnemy(id,pos){const d=monsterMap.get(id);if(!d)return;const g=makeCreature(d.shape,d.color,d.boss);actors.add(g);g.position.copy(pos);const ring=mesh('ring',0xff7a64,[0,.08,0],[.1,.1,.1],g,true);ring.rotation.x=Math.PI/2;ring.visible=false;const e={serial:spawnSerial++,data:d,g,ring,hp:d.hp,max:d.hp,state:'idle',timer:rnd(.2,1.8),origin:pos.clone(),status:{},stolen:false,radius:d.boss?1.2:.65,phase:1,attackTimer:0};enemies.push(e);return e;}
+function statusEnemy(e,name,seconds,value=1){e.status[name]={until:clock+seconds,value};}
+function enemyHas(e,name){return e.status[name]?.until>clock;}
+function nearEnemies(pos,radius){return enemies.filter(e=>e.hp>0&&e.g.position.distanceTo(pos)<radius+e.radius);}
+function deal(e,amount,options={}){
+ if(!e||e.hp<=0)return;let value=amount;if(enemyHas(e,'curse')||enemyHas(e,'diagnose'))value*=1.3;if(options.holy&&e.data.shape==='skeleton')value*=1.8;const critical=options.crit||Math.random()<(has('crit')?.45:.08);if(critical)value*=1.6;value=Math.max(1,Math.floor(value));e.hp-=value;popup(e.g.position,value+(critical?'!':''),critical?'#ffe298':'#fff',critical);burst(e.g.position,e.data.color,4);e.g.scale.setScalar((e.data.boss?1.7:1)*1.08);if(options.knock){const delta=e.g.position.clone().sub(player.position).normalize().multiplyScalar(options.knock);e.g.position.add(delta);statusEnemy(e,'stun',.35);}if(options.freeze)statusEnemy(e,'stun',1.6);if(options.burn)statusEnemy(e,'dot',4,attackPower()*.25);if(options.poison)statusEnemy(e,'dot',6,attackPower()*.2);if(!options.dot){hitstop=Math.max(hitstop,.035);shake=Math.max(shake,.08);audio(rnd(110,180),.065,'triangle',.02,.45);}if(e.hp<=0)killEnemy(e);
+}
+function killEnemy(e){
+ e.hp=0;e.state='dead';e.ring.visible=false;const pos=e.g.position.clone();burst(pos,e.data.color,12);actors.remove(e.g);const c=mesh('box',0x73796f,[pos.x,.1,pos.z],[.65,.16,.9],fxRoot);corpses.push({pos,node:c,until:clock+35,human:false});P.kills++;let drops=has('harvest')?2:1;if(has('reverseDrop'))drops=Math.random()<.55?0:4;addItem(e.data.drop,drops);if(Math.random()<.4)addItem('약초');if(e.data.id==='rabbit'&&Math.random()<.3)addItem('사슴고기');P.gold+=Math.floor(4+e.data.level*2)*(e.data.boss?8:1);gainXP((18+e.data.level*10)*(e.data.boss?5:1));if(e.data.boss){questBosses.add(e.data.id);log(e.data.name+' 처치! 보스도 퇴근합니다.');if(e.data.id==='examiner'){addItem('훈련 증서',3);unlock('warrior');}audio(330,.3,'sawtooth',.03,2);}respawns.push({id:e.data.id,at:clock+area.respawn*(e.data.boss?4:1),pos:e.origin.clone()});checkUnlocks();
+}
+function damagePlayer(amount,source){
+ if(P.hp<=0||has('absolute')||dodgeTime>0||has('fly'))return;if(has('pity')&&Math.random()<.45){popup(player.position,'차마 못 때림','#e6dba4');return;}if(has('parry')||has('counter')){P.parries++;if(P.hits>=3)P.parryChain=true;P.hits=0;pulse(player.position,0xeaffaa,3,.3);audio(1100,.15,'triangle',.08,1.4);popup(player.position,'패리!','#d4ff89',true);if(source)deal(source,attackPower()*(has('counter')?5:3),{knock:2});checkUnlocks();return;}
+ let dmg=amount;if(P.job==='vampire')dmg/=3;if(has('rage'))dmg*=1.35;if(has('armor')||has('holymoly'))dmg*=.55;if(learnedEffect('hold'))dmg/=1+Math.min(holdTime,30)*.025;if(has('shield')){dmg*=.2;if(P.hp<=1.01){P.blocksAtOne++;checkEvolution();}}if(has('manashield')){const absorbed=Math.min(P.mp,dmg*.8);P.mp-=absorbed;dmg-=absorbed;}if(has('survive')&&P.hp-dmg<=0){P.hp=1;delete buffs.survive;log('HP 1. 버텼지만 해결된 건 아닙니다.');}else P.hp-=Math.max(1,Math.floor(dmg));P.hits++;popup(player.position,'-'+Math.floor(dmg),'#ff8995');$('hurt').style.opacity='.65';shake=.35;hitstop=.06;audio(90,.16,'sawtooth',.04,.45);if(P.hp<=0)die();
+}
+function die(){P.hp=maxHP();P.mp=maxMP();P.xp=Math.floor(P.xp*.9);log('사망했습니다. 경험치 10%가 현장에 남았습니다.');enterArea(P.job==='vampire'?'ship':'town');flash();save();}
+function summon(kind,pos=player.position){if(summons.length>=8){log('동료 정원은 8명입니다. 회식비가 없습니다.');return;}const skeleton=kind==='skeleton'||kind==='raise',color=skeleton?0xc5d8b5:kind==='ghost'?0x8dcce0:kind==='scarecrow'?0xd2b27d:0xd5bc8e;const g=makeCreature(skeleton?'skeleton':kind==='clone'?'golem':kind==='scarecrow'?'golem':'wolf',color);g.scale.setScalar(.65);g.position.copy(pos).add(V(rnd(-1,1),0,rnd(-1,1)));actors.add(g);summons.push({g,kind,hp:100+P.level*10,max:100+P.level*10,cd:0,until:clock+(kind==='tame'?999999:45),pet:kind==='tame'});if(kind==='tame')P.pet=true;}
+function nearestCorpse(){return corpses.filter(c=>c.until>clock&&c.pos.distanceTo(player.position)<8).sort((a,b)=>a.pos.distanceTo(player.position)-b.pos.distanceTo(player.position))[0];}
+function consumeCorpse(c){fxRoot.remove(c.node);corpses=corpses.filter(x=>x!==c);}
+function nearestEnemy(range=20){return enemies.filter(e=>e.hp>0&&e.g.position.distanceTo(player.position)<range).sort((a,b)=>a.g.position.distanceTo(player.position)-b.g.position.distanceTo(player.position))[0];}
+function facingEnemy(e,range,wide=false){const delta=e.g.position.clone().sub(player.position);delta.y=0;return delta.length()<range+e.radius&&(wide||delta.normalize().dot(aim)>-.05);}
+
+/* 공통 스킬 실행기 */
+function context(skill,scale=1){return {skill,scale,power:attackPower()*skill.mult*scale,pos:player.position.clone(),direction:aim.clone()};}
+function areaHit(c,r=5,options={}){pulse(c.pos,getJob(P.job).color,r,.45);for(const e of nearEnemies(c.pos,r))deal(e,c.power,options);}
+function meleeHit(c,range=3,options={}){pulse(c.pos,getJob(P.job).color,range,.22);for(const e of enemies)if(e.hp>0&&facingEnemy(e,range,options.wide))deal(e,c.power,options);weapon.rotation.x=-1.2;schedule(.15,()=>weapon.rotation.x=0);}
+function shoot(c,options={}){const direction=c.direction.clone();if(options.angle)direction.applyAxisAngle(V(0,1,0),options.angle);const node=mesh(options.ball?'sphere':'box',options.color||getJob(P.job).color,[c.pos.x,c.pos.y+.95,c.pos.z],options.ball?[.25,.25,.25]:[.12,.12,.65],fxRoot,true);node.rotation.y=Math.atan2(direction.x,direction.z);shots.push({node,direction,speed:options.speed||22,life:2.1,power:c.power,hit:new Set(),...options});audio(450,.06,'triangle',.02,.6);}
+function teleport(distance,back=false){player.position.add(aim.clone().multiplyScalar(distance*(back?-1:1)));player.position.x=clamp(player.position.x,-32,32);player.position.z=clamp(player.position.z,-32,32);pulse(player.position,0xa8d9ff,2,.3);}
+function moveBurst(distance,damage=0){const from=player.position.clone();teleport(distance);if(damage>0){const segment=new THREE.Line3(from,player.position.clone());for(const e of enemies){if(e.hp<=0)continue;const point=segment.closestPointToPoint(e.g.position,true,V());if(point.distanceTo(e.g.position)<1.7)deal(e,damage,{knock:2});}}dodgeTime=.3;}
+function makeField(c,type,r=4,duration=5){const node=mesh('ring',type==='heal'?0x9fffb3:type==='trap'?0xf2d579:0xa5c76b,[c.pos.x,.08,c.pos.z],[r,r,r],fxRoot,true);node.rotation.x=Math.PI/2;fields.push({node,pos:c.pos.clone(),type,r,until:clock+duration,tick:0,power:c.power});}
+function canSpecial(s){
+ const k=s.effectKey;if(s.name==='★은신'&&!(P.job==='thief'&&P.tier>=2)&&!superJob()){log('은신은 도적 2차 전직부터입니다.');return false;}if(s.name==='★홀리몰리'&&P.level<50){log('홀리몰리는 Lv.50부터입니다.');return false;}if(s.job==='tamer'&&k!=='tame'&&!summons.some(a=>a.pet)){log('동물이 없습니다. 동물 없는 합체는 혼잣말입니다.');return false;}if(['skeleton','raise'].includes(k)){if(!nearestCorpse()){log('주변 8m 안에 시체가 필요합니다.');return false;}if(summons.filter(a=>['skeleton','raise'].includes(a.kind)).length>=5){log('스켈레톤은 최대 5마리입니다.');return false;}if(nearestCorpse().human&&P.gold<100){log('사람 시체 합의금 100G가 필요합니다.');return false;}}if(k==='brew'&&((P.bag['약초']||0)<5||(P.bag['고철']||0)<1)){log('낮은 등급 포션도 약초 5개와 고철 1개가 듭니다.');return false;}if(k==='synthesis'&&(P.bag['고철']||0)<3){log('장비 합성에는 고철 3개가 필요합니다.');return false;}return true;
+}
+function useSkill(id){const s=skillMap.get(id);if(!s||!started||modal||mathPending||P.hp<=0)return;if(!P.learned.includes(id)){log('배우지 않은 스킬입니다.');return;}if(s.type==='passive'){if(s.effectKey==='fusion')openFusion();else log('패시브는 습득 즉시 적용됩니다.');return;}if((cd[id]||0)>clock)return;if(P.mp<s.mp){log('마나 부족. 의지도 결제되지 않았습니다.');return;}const faithCost=s.job==='priest'&&s.effectKey!=='sermon'?Math.max(2,Math.ceil(s.mp*.18)):0;if(P.divine<faithCost){log('신성력이 부족합니다. 선행·설교·성직자 장비를 이용하세요.');return;}if(!canSpecial(s))return;if(P.job==='mage'&&['projectile','area','buff','move'].includes(s.type)){openMath(s,faithCost);return;}commitSkill(s,1,faithCost);}
+function commitSkill(s,scale=1,faith=0){P.mp-=s.mp;P.divine=Math.max(0,P.divine-faith);cd[s.id]=clock+s.cool;s.effect(context(s,scale));if(has('stealth')&&['melee','area','projectile'].includes(s.type)&&s.effectKey!=='backstab')delete buffs.stealth;audio(300,.1,'triangle',.035,1.4);}
+function perform(k,c){switch(k){
+case 'melee':meleeHit(c);break;
+case 'combo':meleeHit(c,3);schedule(.12,()=>meleeHit({...c,power:c.power*.3},3));break;
+case 'spear':meleeHit({...c,power:c.power*.6},5.8);schedule(.08,()=>meleeHit({...c,power:c.power*.4},5.8));break;
+case 'spin':areaHit(c,4.5,{knock:.5});break;
+case 'slam':areaHit(c,5.5,{knock:2});shake=.4;break;
+case 'area':areaHit(c,4);break;
+case 'lightning':areaHit(c,4,{freeze:true});burst(c.pos,0xbbeaff,20);break;
+case 'chain':{const targets=enemies.filter(e=>e.hp>0&&e.g.position.distanceTo(c.pos)<14).slice(0,5);targets.forEach((e,i)=>schedule(i*.09,()=>{if(e.hp>0){deal(e,c.power,{freeze:true});pulse(e.g.position,0xb8eaff,1,.3);}}));break;}
+case 'projectile':shoot(c);break;
+case 'burn':shoot(c,{burn:true,color:0xff925b});break;
+case 'freeze':shoot(c,{freeze:true,color:0xa3e5ff});break;
+case 'lightningShot':shoot(c,{freeze:true,pierce:true,color:0xb8dfff});break;
+case 'pierce':shoot(c,{pierce:true,speed:32});break;
+case 'explode':shoot(c,{explode:true,color:0xffb45f});break;
+case 'poisonShot':shoot(c,{poison:true,color:0xaedc78});break;
+case 'knockShot':shoot(c,{knock:3});break;
+case 'holyshot':shoot(c,{holy:true,color:0xffefad});break;
+case 'double':shoot(c,{angle:-.045});shoot(c,{angle:.045});break;
+case 'rapid':for(let i=0;i<5;i++)schedule(i*.08,()=>shoot(c,{angle:rnd(-.06,.06)}));break;
+case 'spread':for(let i=-2;i<=2;i++)shoot(c,{angle:i*.16,life:.65});break;
+case 'ball':shoot(c,{ball:true,knock:3,speed:27});break;
+case 'rain':makeField(c,'damage',5,3);pulse(c.pos,0xffdc9a,5,.6);break;
+case 'meteor':{const e=nearestEnemy(25),pos=e?e.g.position.clone():c.pos.clone().add(c.direction.clone().multiplyScalar(6));pulse(pos,0xff674e,6,1.8);log('메테오 시전 중… 하늘에서 결재 대기 중입니다.');schedule(1.8,()=>{areaHit({...c,pos},6,{burn:true,knock:2});burst(pos,0xff8d55,35);shake=.65;});break;}
+case 'heal':heal((25+P.level*4)*c.skill.mult*c.scale);break;
+case 'mana':P.mp=Math.min(maxMP(),P.mp+65+P.level*3);popup(player.position,'마나 회복','#8acbff');break;
+case 'shield':buff('shield',6);pulse(c.pos,0xb7dcff,1.6,.7);break;
+case 'armor':buff('armor',10);for(const a of summons)a.hp=Math.min(a.max,a.hp+20);break;
+case 'holyweapon':buff('holyweapon',12);break;
+case 'holymoly':buff('holymoly',15);break;
+case 'healzone':makeField(c,'heal',4,8);break;
+case 'cleanse':delete buffs.slow;delete buffs.poison;heal(25+P.level*2);break;
+case 'revive':buff('survive',30);heal(maxHP()*.5);if(!summons.length&&P.pet)summon('tame');log('부활 보험 30초 적용. 죽기 전에 사용하는 상품입니다.');break;
+case 'sermon':P.divine=Math.min(100,P.divine+20);for(const e of nearEnemies(c.pos,7))statusEnemy(e,'stun',3);pulse(c.pos,0xffe8a0,7,.5);log('설교 완료. 신성력 +20. 몬스터는 졸고 있습니다.');break;
+case 'manashield':buff('manashield',12);break;
+case 'power':buff('power',10);break;
+case 'rage':buff('rage',10);break;
+case 'crit':buff('crit',12);break;
+case 'haste':buff('haste',8);break;
+case 'dodge':moveBurst(5);break;
+case 'charge':moveBurst(8,c.power);break;
+case 'teleport':moveBurst(10);break;
+case 'skyblink':moveBurst(4);air=5;buff('fly',1.8);break;
+case 'fly':buff('fly',5);air=2.5;break;
+case 'backshot':teleport(4,true);shoot({...c,pos:player.position.clone()});dodgeTime=.3;break;
+case 'knock':meleeHit(c,3.3,{knock:3});break;
+case 'taunt':for(const e of nearEnemies(c.pos,16)){e.state='chase';statusEnemy(e,'taunt',8);}pulse(c.pos,0xffb86b,12,.4);break;
+case 'confuse':for(const e of nearEnemies(c.pos,7))statusEnemy(e,'confuse',6);log('검찰입니다. 안전계좌로 어그로를 이체하세요.');break;
+case 'curse':for(const e of nearEnemies(c.pos,7))statusEnemy(e,'curse',8);pulse(c.pos,0xbb82df,7,.5);break;
+case 'weaken':for(const e of nearEnemies(c.pos,7))statusEnemy(e,'weak',8);pulse(c.pos,0x8dd9ff,7,.5);break;
+case 'root':case 'stun':for(const e of nearEnemies(c.pos,6))statusEnemy(e,'stun',k==='root'?4:2.5);pulse(c.pos,0xbbb4ff,6,.5);break;
+case 'fear':for(const e of nearEnemies(c.pos,7))statusEnemy(e,'fear',5);pulse(c.pos,0x8a7cbb,7,.6);break;
+case 'stealth':buff('stealth',9);popup(player.position,'출근 기록 삭제','#c7baff');break;
+case 'backstab':{const hidden=has('stealth');for(const e of enemies){if(e.hp<=0||!facingEnemy(e,3.5))continue;const back=player.position.clone().sub(e.g.position).normalize().dot(V(0,0,-1).applyQuaternion(e.g.quaternion))<-.2;deal(e,c.power*(hidden&&back?2.5:1),{crit:hidden&&back});}delete buffs.stealth;pulse(c.pos,0xb9a7ff,3,.3);break;}
+case 'smoke':buff('stealth',4);for(const e of nearEnemies(c.pos,5))statusEnemy(e,'confuse',4);pulse(c.pos,0x9694bd,5,.7);break;
+case 'lucky':meleeHit({...c,power:c.power*(Math.random()<.3?3:2)});break;
+case 'steal':{const e=nearestEnemy(3);if(e&&!e.stolen){P.thiefXP++;if(Math.random()<Math.min(.9,.35+P.thiefXP*.03)){e.stolen=true;addItem(e.data.drop);P.gold+=10;log('소매치기 성공. 숙련도 '+P.thiefXP);}else log('소매치기 실패. 손이 너무 정직합니다.');deal(e,c.power);}else if(area.id==='town'&&nearestNPC){P.thiefXP++;P.gold+=8;log('NPC에게서 8G를 슬쩍했습니다. 양심 -8.');}else log('훔칠 대상이 없거나 이미 빈 주머니입니다.');break;}
+case 'burglary':if(area.id==='town'){P.gold+=25;addItem('고철');log('빈집털이 성공. 빈집이라 보상도 소박합니다.');}else log('이 지역에는 빈집이 없습니다.');break;
+case 'disarm':buff('trapimmune',12);gainXP(5);log('함정 감지·면역 12초.');break;
+case 'trap':makeField({...c,pos:c.pos.clone().add(c.direction.clone().multiplyScalar(3))},'trap',2,15);break;
+case 'poison':case 'acid':makeField(c,'poison',k==='acid'?6:4,6);break;
+case 'firearea':areaHit(c,4.5,{burn:true});break;
+case 'salt':areaHit(c,4);for(const e of nearEnemies(c.pos,4))statusEnemy(e,'weak',5);break;
+case 'skeleton':case 'raise':{const corpse=nearestCorpse();if(!corpse)break;if(corpse.human){P.gold-=100;log('유족 합의금 100G 지불. 소환 계약에 조의금은 별도입니다.');}const pos=corpse.pos.clone();consumeCorpse(corpse);summon(k,pos);break;}
+case 'clone':case 'ghost':case 'animal':case 'scarecrow':summon(k);break;
+case 'tame':{const e=enemies.find(e=>e.hp>0&&!e.data.boss&&['rabbit','deer','icewolf'].includes(e.data.id)&&e.hp/e.max<.4&&e.g.position.distanceTo(c.pos)<5);if(e){e.hp=0;actors.remove(e.g);summon('tame',e.g.position);log('테이밍 성공. 고용 계약서는 생략합니다.');}else log('HP 40% 미만의 토끼·사슴·얼음늑대에게 5m 이내에서 사용하세요.');break;}
+case 'petboost':buff('petboost',15);for(const a of summons)if(a.pet)a.hp=a.max;break;
+case 'petcombo':areaHit(c,7,{knock:2});for(const a of summons)if(a.pet)pulse(a.g.position,0xffdf91,3,.4);break;
+case 'feed':for(const a of summons)a.hp=a.max;heal(20);break;
+case 'cannon':{const gun=new THREE.Group();fxRoot.add(gun);gun.position.copy(c.pos);mesh('cylinder',0x8298a2,[0,.9,0],[.45,2.5,.45],gun).rotation.x=Math.PI/2;gun.rotation.y=Math.atan2(c.direction.x,c.direction.z);effects.push({node:gun,life:1.2,max:1.2,static:true});schedule(.45,()=>shoot(c,{explode:true,ball:true,speed:28,color:0xffc177}));break;}
+case 'reload':for(const id of Object.keys(cd))if(skillMap.get(id)?.job==='gunner'&&id!==c.skill.id)cd[id]=clock;log('포수 스킬 재장전 완료.');break;
+case 'brew':spendItem('약초',5);spendItem('고철',1);log('휘젓개 가동. 제조 완료까지 25초. 이동해도 제조는 계속됩니다.');schedule(25,()=>{addItem('회복 포션',2);log('제조 완료: 회복 포션 2개. 가성비는 묻지 마세요.');});break;
+case 'synthesis':spendItem('고철',3);P.weapon='연성 검';P.durability=100;buff('upgrade',40);log('장비 합성 완료. 공격력 강화 40초.');break;
+case 'potionShot':if(nearEnemies(c.pos,9).length)shoot(c,{explode:true,color:0x8bf0a0});else heal(35+P.level*4);break;
+case 'repair':{P.repairXP++;const risk=Math.max(.02,.4-P.repairXP*.025);if(Math.random()<risk){P.weapon='부서진 무기';P.durability=0;log('수리 실패. 무기가 더 이상 무기가 아닙니다.');}else{P.durability=100;if(P.weapon==='부서진 무기')P.weapon='수리한 검';log('수리 성공. 숙련도 '+P.repairXP);}break;}
+case 'upgrade':buff('upgrade',20);P.durability=Math.max(0,P.durability-10);break;
+case 'smelt':if(spendItem('고철',2)){P.gold+=40;log('고철 2개를 40G로 제련했습니다.');}else log('고철 2개가 필요합니다.');break;
+case 'plant':{const pos=c.pos.clone();pulse(pos,0xa4c76c,1,12);schedule(12,()=>{addItem('약초',4);addItem('사슴고기');log('수확 완료. 땅에서 사슴고기가 나는 건 묻지 마세요.');});break;}
+case 'harvest':buff('harvest',25);break;
+case 'food':if(spendItem('사슴고기',1)||spendItem('팝콘',1)){buff('food',30);heal(45);log('요리 버프: 공격력 +20%.');}else log('사슴고기 또는 팝콘이 필요합니다.');break;
+case 'surgery':if(Math.random()<.25){damagePlayer(20+P.level);log('수술 실패. 동의서는 받았습니다.');}else heal(maxHP()*.7);break;
+case 'diagnose':for(const e of nearEnemies(c.pos,10))statusEnemy(e,'diagnose',10);log('진단: 맞으면 아픈 상태입니다. 적 받는 피해 +30%.');break;
+case 'pity':buff('pity',10);break;
+case 'overpay':if(P.gold>=25){P.gold-=25;buff('power',12);log('25G를 내고 위로받았습니다.');}else log('바가지 맞을 돈도 없습니다.');break;
+case 'reverseDrop':buff('reverseDrop',20);log('드롭이 0개 또는 4개로 뒤집힙니다.');break;
+case 'survive':buff('survive',20);break;
+case 'applause':buff('applause',25);audio(700,.1,'square',.02);log('박수! 경험치 +50%.');break;
+case 'parry':buff('parry',.35);pulse(c.pos,0xe5ffb3,1.6,.35);break;
+case 'counter':buff('counter',.55);pulse(c.pos,0xe5ffb3,2,.55);break;
+case 'act':P.acting++;pulse(c.pos,0xffb9a2,2,.4);log('분노한 척 연기했습니다. 연기 경력 '+P.acting+'회.');checkEvolution();break;
+case 'recoil':meleeHit(c,3.2,{knock:2});P.hp=Math.max(1,P.hp-5);break;
+case 'transform':{const form=['토끼','늑대','곰','물고기'][Math.floor(Math.random()*4)];buff('animal',10);if(form==='물고기')buff('fish',10);else buff('haste',10);log('변신 결과: '+form+'. '+(form==='물고기'?'육지 적합성 검사 실패.':'일단 다리가 있습니다.'));break;}
+case 'absolute':buff('absolute',4);break;
+case 'leech':{const e=nearestEnemy(3.5);if(e){deal(e,c.power);heal(c.power*.45);}break;}
+case 'drain':areaHit(c,5);heal(c.power*.2*nearEnemies(c.pos,5).length);break;
+case 'darkhands':for(const e of nearEnemies(c.pos,8)){const instant=!e.data.boss&&Math.random()<.22;deal(e,instant?e.max*2:c.power);if(instant)popup(e.g.position,'퇴근 처리','#cc9bff');}pulse(c.pos,0x9e72cd,8,.8);break;
+case 'motorcycle':buff('motorcycle',15);buff('haste',15);break;
+case 'bug':for(const e of nearEnemies(c.pos,10)){e.g.position.copy(randomSpawn());statusEnemy(e,'stun',1);}log('몬스터 위치를 재배치했습니다. QA는 못 봤습니다.');break;
+case 'rollback':P.hp=Math.max(1,Math.min(maxHP(),lastRollback.hp));player.position.copy(lastRollback.pos);pulse(player.position,0x8effdf,3,.5);log('약 5초 전 체력과 위치로 롤백했습니다.');break;
+case 'random':{const options=['spin','burn','chain','heal','charge','poison','meteor'];perform(options[Math.floor(Math.random()*options.length)],c);break;}
+case 'settlement':buff('legal',25);log('합의서 양식을 준비했습니다. 합의금은 여전히 100G입니다.');break;
+case 'fusionElement':{const opts=[{freeze:true,color:0xafe8ff},{freeze:true,color:0xd5ebff},{burn:true,color:0xff995d},{holy:true,color:0xffe9ab}];shoot({...c,power:attackPower()*3},opts[Math.floor(Math.random()*4)]);break;}
+case 'warmHeal':heal(65+P.level*3);P.hp=Math.max(1,P.hp-15);log('뜨끈한 치료: 회복 후 화상 15.');break;
+case 'arrowSteal':shoot(c,{pierce:true});P.gold+=8;log('화살을 쐈는데 주머니가 무거워졌습니다.');break;
+default:log('상시 효과가 적용됩니다.');break;
+}}
+/* 마법 연산 */
+function openMath(s,faith=0){const easy=s.effectKey==='lightning',reduced=P.weapon==='마법 지팡이',difficulty=Math.max(1,(easy?1:Math.ceil(s.mp/12))-(reduced?2:0));const a=Math.ceil(rnd(1,5+difficulty*3)),b=Math.ceil(rnd(1,5+difficulty*2));const answer=difficulty>=3?a*b:a+b,text=difficulty>=3?a+' × '+b:a+' + '+b;mathPending={s,faith,answer,start:performance.now(),limit:easy?12:Math.max(5,12-difficulty)};$('mathName').textContent=s.name;$('equation').textContent=text+' = ?';$('mathResult').textContent='마법 무기: '+(reduced?'장착 · 난이도 감소':'미장착');$('answer').value='';$('math').style.display='flex';keys.clear();mouseDown=false;setTimeout(()=>$('answer').focus(),30);}
+$('mathForm').addEventListener('submit',e=>{e.preventDefault();if(!mathPending)return;const m=mathPending,raw=$('answer').value.trim();if(!raw)return;const correct=Number(raw)===m.answer,elapsed=(performance.now()-m.start)/1000,scale=correct?(elapsed<m.limit*.45?1.65:elapsed<m.limit?1.2:.8):.25;mathPending=null;$('math').style.display='none';log(correct?'연산 성공. 위력 '+Math.round(scale*100)+'%.':'오답. 마법도 눈치를 보고 25%만 나옵니다.');commitSkill(m.s,scale,m.faith);});
+$('cancelMath').onclick=()=>{mathPending=null;$('math').style.display='none';};
+
+/* UI / 전직 / 융합 / 인벤토리 */
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function setWindow(title,subtitle,html){$('window').innerHTML=`<div class="windowHead"><div><div class="eyebrow">${subtitle}</div><h2>${title}</h2></div><button data-action="close">닫기 ESC</button></div>${html}`;$('modal').style.display='flex';keys.clear();mouseDown=false;}
+function closeModal(){modal=null;$('modal').style.display='none';skillSelection.clear();}
+function openSkills(tab=skillTab){
+ modal='skills';skillTab=tab;const available=DATA.jobs.filter(j=>!j.hidden||P.unlocked.includes(j.id)),owned=P.learned.map(id=>skillMap.get(id)).filter(Boolean),list=tab==='owned'?owned:DATA.skills.filter(s=>s.job===tab&&!P.deleted.includes(s.id));
+ const tabs=`<div class="tabs"><button data-action="tab" data-id="owned" class="${tab==='owned'?'active':''}">습득한 스킬</button>`+available.map(j=>`<button data-action="tab" data-id="${j.id}" class="${tab===j.id?'active':''}">${j.name}</button>`).join('')+'</div>';
+ const cards=list.map(s=>{const learned=P.learned.includes(s.id),learnable=canLearn(s),locked=s.name==='★은신'&&P.tier<2&&!superJob();return `<article class="card ${learned?'active':''}"><small>${TYPES[s.type]} · ${getJob(s.job).name}</small><h3>${escapeHTML(s.name)}</h3><p>MP ${s.mp} · 쿨타임 ${s.cool}초 · 배율 ${s.mult}<br>${skillDescription(s)}</p>${learned?`<select data-slot="${escapeHTML(s.id)}" aria-label="단축키 등록"><option value="">단축키 등록</option>${Array.from({length:8},(_,i)=>`<option value="${i}">${i+1}번 슬롯</option>`).join('')}</select>`:`<button data-action="learn" data-id="${escapeHTML(s.id)}" ${!learnable||locked?'disabled':''}>${locked?'도적 2차 필요':'훈련 · '+learnCost(s)+'G'}</button>`}</article>`;}).join('');
+ setWindow('스킬 기록부','SKILLS / K',tabs+`<div class="notice">스킬은 배운 뒤 1~8번 슬롯에 등록하세요. 패시브는 습득 즉시 적용됩니다.<br>훈련은 마을에서 가능합니다. 초 초보자는 모든 직업 스킬을 배울 수 있습니다.${superJob()?'<br><button data-action="fusion">영구 소모 스킬 융합</button>':''}</div><div class="grid">${cards||'<p>기록된 스킬이 없습니다.</p>'}</div>`);
+}
+function skillDescription(s){const d={shield:'6초간 받는 피해 80% 감소.',parry:'0.35초 안에 들어온 공격을 반격.',counter:'0.55초 반격. 연속 피격 후 패리 조건으로 진화.',power:'10초간 공격력 +50%.',rage:'10초 공격력 +65%, 받는 피해 +35%.',hold:'머문 시간에 따라 방어 상승. 최대 30초 누적.',grit:'HP가 낮을수록 공격력 증가.',night:'어두운 지역에서 추가 공격력.',calm:'상시 공격력 +15%.',fusionAtk:'MP·지속시간 없는 공격력 +10%.',skeleton:'시체 필요 · MP100 · 해골 최대 5마리.',raise:'사람 시체는 100G 합의금.',tame:'HP 40% 미만 동물, 거리 5m.',brew:'약초 5 · 고철 1 · 제조 25초.',repair:'숙련도가 낮을수록 무기 파괴 위험.',meteor:'1.8초 지연 후 지정 범위 강타.',holyshot:'언데드에게 추가 피해.',sermon:'신성력 상승·주변 몬스터 졸음.',fusion:'재료 스킬 2~3개 영구 삭제. 확인 필수.',transform:'10초 랜덤 변신. 물고기는 느립니다.',stealth:'2차 전직 · 9초간 적 추적 회피.',steal:'몬스터/NPC 강탈. 사용 시 숙련도 상승.',rollback:'약 5초 전 HP/위치 복구.',holymoly:'Lv.50 · 공격·방어 강화.',food:'사슴고기 또는 팝콘 소모 · 공격력 +20%.',revive:'30초 안의 치명타를 HP1로 버티는 부활 보험.',settlement:'합의서 준비. 실제 합의금은 면제되지 않습니다.',animal:'펫이 있을 때 지원 동물 소환.',darkhands:'일반 적 22% 즉사. 보스에게는 피해 적용.',spear:'긴 사거리. 1.8m 이내에서는 창술사 기본 피해 감소.',disarm:'12초간 함정 면역.',reverseDrop:'드롭이 0개 또는 4개. 정말 이득일까요?',warmHeal:'회복과 화상이 동시에 옵니다.',arrowSteal:'화살을 쏘며 8G를 훔칩니다.',fusionElement:'얼음·전기·불·성 랜덤탄. 공격력 +200%.'};return d[s.effectKey]||'공통 '+TYPES[s.type]+' 효과. 전투 상황에 맞춰 사용하세요.';}
+function learnCost(s){return s.type==='passive'?60:Math.max(15,Math.floor(s.mp*2+15));}
+function canLearn(s){if(P.deleted.includes(s.id))return false;if(s.job==='supersuper'&&P.job!=='supersuper')return false;return superJob()||s.job===P.job||s.job==='novice';}
+function learn(id){const s=skillMap.get(id);if(!s||!canLearn(s)||P.learned.includes(id))return;if(area.id!=='town'){log('훈련은 마을에서 받으세요.');return;}if(s.name==='★홀리몰리'&&P.level<50){log('Lv.50이 필요합니다.');return;}if(s.name==='★은신'&&P.tier<2&&!superJob())return;const cost=learnCost(s);if(P.gold<cost){log('훈련비가 부족합니다.');return;}P.gold-=cost;P.learned.push(id);const empty=P.slots.indexOf(null);if(empty>=0&&s.type!=='passive')P.slots[empty]=id;log(s.name+' 습득. 지식은 환불되지 않습니다.');checkUnlocks();save();openSkills(skillTab);}
+function jobRequirement(j){if(j.id==='novice')return {ok:true,text:'언제든 초심으로'};if(j.hidden)return {ok:P.unlocked.includes(j.id),text:hiddenCondition(j.id)};if(j.id==='warlock')return {ok:P.level>=10&&P.history.includes('mage'),text:'Lv.10 · 마법사 경력'};if(j.id==='lancer')return {ok:P.level>=12&&(P.bag['훈련 증서']||0)>=3,text:'Lv.12 · 훈련 증서 3개'};if(j.id==='football')return {ok:P.level>=10,text:'Lv.10'};if(j.id==='mage')return {ok:P.level>=3,text:'Lv.3 · 입학 연산시험'};return {ok:P.level>=3,text:'Lv.3'};}
+function hiddenCondition(id){return ({super:'첫 퀘스트 완료',supersuper:'Lv.20 · 융합 1회 · 패리 3회',magicblade:'Lv.12 · 전사와 마법사 경력',vampire:'Lv.18 · 용 비늘 획득',powerarcher:'전사 스킬 습득 후 궁수 전직',delivery:'Lv.10 · 선행 3회',error:'융합 3회'})[id]||'특수 조건';}
+function jobPlace(id){return ({mage:'★ 마법사의 탑',archer:'★ 궁수 전직관',warrior:'★ 전사의 자격대',thief:'☆ 도적 길드',priest:'☆ 성당',alchemist:'☆ 연금술 공방',warlock:'☆ 암흑 신전',fighter:'☆ 도장'})[id]||'☆ 종합 전직 창구';}
+function openJobs(){
+ modal='jobs';const cards=DATA.jobs.map(j=>{const visible=!j.hidden||P.unlocked.includes(j.id);if(!visible)return `<div class="card locked"><small>HIDDEN CLASS</small><h3>???</h3><p>전직 기록에는 아직 빈칸뿐입니다.</p></div>`;const req=jobRequirement(j),current=P.job===j.id;return `<div class="card ${current?'active':''}"><small>${j.group} · ${jobPlace(j.id)}</small><h3>${j.name}${current?' · 현재':''}</h3><p>${j.desc}<br><small>${req.text}</small></p>${current?`<button data-action="tier" ${P.tier>=2||P.level<20?'disabled':''}>2차 전직 · Lv.20${P.tier>=2?' 완료':''}</button>`:`<button data-action="job" data-id="${j.id}" ${req.ok?'':'disabled'}>전직하기</button>`}</div>`;}).join('');
+ setWindow('직업 / 전직 계통도','CLASS ARCHIVE / J',`<div class="notice">초보자 → 기본 직업 → 2차 전직 → 히든 직업<br>현재: ${getJob(P.job).name} ${P.tier}차 · 경력: ${P.history.map(id=>getJob(id)?.name).filter(Boolean).join(' → ')}<br>전직은 마을의 전직 안내원 통합 창구에서 처리합니다. 배운 스킬은 보존됩니다.<br>☆ 마법사 입학시험: 연산 3문제 연속 정답. 취소 가능.</div><div class="grid">${cards}</div>`);
+}
+function changeJob(id){
+ const j=getJob(id);if(!j||!jobRequirement(j).ok)return;if(area.id!=='town'){log('전직은 시작의 마을에서 가능합니다.');return;}
+ if(id==='mage'){for(let i=0;i<3;i++){const a=Math.ceil(rnd(3,12)),b=Math.ceil(rnd(2,9)),answer=prompt('마법사의 탑 입학시험 '+(i+1)+'/3\n'+a+' × '+b+' = ?');if(answer===null)return;if(Number(answer)!==a*b){log('불합격. 전직 난이도가 높다는 건 진짜였습니다.');return;}}}
+ P.job=id;P.tier=1;if(!P.history.includes(id))P.history.push(id);if(!P.unlocked.includes(id))P.unlocked.push(id);const free=DATA.skills.filter(s=>s.job===id&&!P.deleted.includes(s.id)).slice(0,2);for(const s of free)if(!P.learned.includes(s.id))P.learned.push(s.id);P.slots=P.learned.filter(id=>skillMap.get(id)?.job===P.job&&skillMap.get(id)?.type!=='passive').slice(0,8);while(P.slots.length<8)P.slots.push(null);P.hp=maxHP();P.mp=maxMP();buffs={};buildPlayer();flash();audio(550,.4,'triangle',.05,2);log(j.name+' 전직 완료! 직업 안정성은 보장하지 않습니다.');checkUnlocks();save();openJobs();
+}
+function openMap(){
+ modal='map';const cards=DATA.areas.map(a=>{const boss=monsterMap.get(a.boss);return `<div class="card ${a.id===area.id?'active':''}"><small>${a.id==='town'?'SAFE ZONE':'HUNTING GROUND'} · 권장 Lv.${a.level}</small><h3>${a.mark} ${a.name}</h3><p>${a.desc}<br>드롭: ${a.drops}<br>보스: ${boss?boss.name+' Lv.'+boss.level:'없음'}<br>리스폰: ${a.respawn?a.respawn+'초 / 보스 '+a.respawn*4+'초':'없음'}${a.bright?'<br>☀ 밝은 구역 · 뱀파이어 즉사':'<br>☾ 어두운 구역'}</p><button data-action="travel" data-id="${a.id}">${a.id===area.id?'현재 지역':'이동하기'}</button></div>`;}).join('');
+ setWindow('갈 곳은 많고 목숨은 하나','WORLD MAP / M',`<div class="notice">권장 레벨은 입장 제한이 아닙니다. 높은 레벨의 적에게는 도망도 전술입니다.<br>밝은 구역으로 이동하는 뱀파이어는 즉사 후 전함터에서 부활합니다.</div><div class="grid">${cards}</div>`);
+}
+function openInventory(){
+ modal='inventory';const items=Object.entries(P.bag).filter(([,n])=>n>0).map(([name,n])=>`<div class="card"><h3>${escapeHTML(name)}</h3><p>보유 ${n}개</p>${name==='회복 포션'?'<button data-action="potion">사용 · HP 55% 회복</button>':''}${['사슴고기','팝콘'].includes(name)?`<button data-action="eat" data-id="${name}">먹기 · HP 30</button>`:''}</div>`).join('');
+ setWindow('수상하게 무거운 가방','INVENTORY / I',`<div class="notice">${P.gold}G · 장비: ${P.weapon} · 내구도 ${P.durability.toFixed(1)}%<br>마법 지팡이는 마법 연산 난이도를 낮추고, 성직자 장비는 신성력을 천천히 회복합니다.<br><button data-action="equip" data-id="초보자 검">검 장착</button>${P.bag['마법 지팡이']?'<button data-action="equip" data-id="마법 지팡이">지팡이 장착</button>':''}${P.bag['성직자 성의']?'<button data-action="equip" data-id="성직자 성의">성의 장착</button>':''}</div><div class="grid">${items||'<p>주머니가 가볍습니다.</p>'}</div>`);
+}
+function openMenu(){modal='menu';setWindow('잠깐, 현실 로그인이 필요합니다','PAUSED / ESC',`<div class="notice">게임은 일시정지 상태입니다. 지도·가방·스킬창도 시간을 멈춥니다.<br>진행은 브라우저에 자동 저장됩니다. 지역의 몬스터와 소환수는 저장하지 않습니다.</div><div class="row"><button data-action="resume" class="primary">계속하기</button><button data-action="save">저장하기</button><button data-action="sound">효과음 ${soundEnabled?'끄기':'켜기'}</button><button data-action="map">지도</button><button data-action="reset">저장 초기화</button></div><p style="margin-top:25px;color:var(--muted)">WASD 이동 · 우클릭 드래그 카메라 · 좌클릭 공격<br>Space 회피 · 1~8 스킬 · E 대화 · I 가방 · K 스킬 · J 직업 · M 지도<br>마을 이장 → 토끼 간 10개 → 퀘스트 완료 → 첫 히든 직업 해금</p>`);}
+function openShop(){modal='shop';const factor=P.job==='sucker'?1.8:1,goods=[['회복 포션',25],['약초',5],['고철',12],['마법 지팡이',180],['성직자 성의',160],['수리 서비스',50]];setWindow('바가지 상점','FAIR PRICE IS A MYTH',`<div class="notice">소지금 ${P.gold}G ${P.job==='sucker'?'· 호구 특별가 +80%. VIP 대우입니다.':''}</div><div class="grid">${goods.map(([name,price])=>`<div class="card"><h3>${name}</h3><p>${Math.ceil(price*factor)}G</p><button data-action="buy" data-id="${name}" data-price="${Math.ceil(price*factor)}">구매</button></div>`).join('')}</div>`);}
+function openFusion(){if(!superJob()){log('초 초보자 계열 전용입니다.');return;}modal='fusion';skillSelection.clear();renderFusion();}
+function renderFusion(){const cards=P.learned.map(id=>skillMap.get(id)).filter(s=>s&&s.effectKey!=='fusion').map(s=>`<div class="card ${skillSelection.has(s.id)?'active':''}"><label><input type="checkbox" data-fusion="${escapeHTML(s.id)}" ${skillSelection.has(s.id)?'checked':''}> ${escapeHTML(s.name)}</label><p>${TYPES[s.type]} · 재료로 쓰면 영구 삭제</p></div>`).join('');setWindow('잘못 섞인 미래','SKILL FUSION / IRREVERSIBLE',`<div class="notice">재료 2~3개를 선택하세요. 재료 스킬은 습득 목록과 슬롯에서 영구 삭제되며 다시 배울 수 없습니다.<br>결과는 선택한 재료에 따라 개그 스킬 또는 랜덤 4속성탄·상시 공격력 버프입니다.</div><button class="primary" data-action="fuse" ${skillSelection.size<2||skillSelection.size>3?'disabled':''}>${skillSelection.size}개 스킬 영구 소모하고 융합</button><div class="grid">${cards}</div>`);}
+function fuse(){
+ const ids=[...skillSelection];if(ids.length<2||ids.length>3)return;const names=ids.map(id=>skillMap.get(id).name);if(!confirm('정말 융합할까요?\n\n'+names.join('\n')+'\n\n위 스킬은 영구 삭제됩니다.\n재습득·되돌리기 불가.'))return;const effectKeys=ids.map(id=>skillMap.get(id).effectKey);let name,type,effect,mult;
+ if(effectKeys.includes('heal')&&effectKeys.includes('burn'))[name,type,effect,mult]=['☆뜨끈한 치료','heal','warmHeal',1];else if(effectKeys.includes('double')&&effectKeys.includes('steal'))[name,type,effect,mult]=['☆화살 훔치기','projectile','arrowSteal',2.5];else if(Math.random()<.5)[name,type,effect,mult]=['★뒤죽박죽 4속성탄','projectile','fusionElement',3];else [name,type,effect,mult]=['★영구 공격력 +10%','passive','fusionAtk',1];
+ P.learned=P.learned.filter(id=>!ids.includes(id));P.deleted.push(...ids);P.slots=P.slots.map(id=>ids.includes(id)?null:id);P.fused++;const id='fusion:'+P.fused+':'+Date.now(),s={id,name,job:'super',type,mp:0,cool:type==='passive'?0:3,mult,effectKey:effect,effect:c=>perform(effect,c)};skillMap.set(id,s);DATA.skills.push(s);P.learned.push(id);P.customSkills??=[];P.customSkills.push({id,name,job:'super',type,mp:0,cool:s.cool,mult,effectKey:effect});const empty=P.slots.indexOf(null);if(empty>=0&&type!=='passive')P.slots[empty]=id;log('융합 결과: '+name);flash();checkUnlocks();save();openSkills('owned');
+}
+$('window').addEventListener('change',e=>{const slot=e.target.dataset.slot;if(slot){if(e.target.value==='')return;const n=Number(e.target.value);P.slots[n]=slot;save();log((n+1)+'번에 '+skillMap.get(slot).name+' 등록.');openSkills(skillTab);}const fusion=e.target.dataset.fusion;if(fusion){if(e.target.checked)skillSelection.add(fusion);else skillSelection.delete(fusion);renderFusion();}});
+$('window').addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b||b.disabled)return;const {action,id}=b.dataset;switch(action){
+case 'close':case 'resume':closeModal();break;
+case 'tab':openSkills(id);break;
+case 'learn':learn(id);break;
+case 'job':changeJob(id);break;
+case 'tier':if(area.id!=='town'){log('2차 전직은 마을에서 가능합니다.');break;}if(P.level>=20&&P.tier<2){P.tier=2;flash();log('2차 전직 완료! 도적은 은신을 배울 수 있습니다.');save();openJobs();}break;
+case 'travel':closeModal();enterArea(id);break;
+case 'potion':if(spendItem('회복 포션',1)){heal(maxHP()*.55);audio(600,.15,'sine',.03,1.4);}openInventory();save();break;
+case 'eat':if(spendItem(id,1))heal(30);openInventory();save();break;
+case 'equip':P.weapon=id;P.durability=100;openInventory();save();break;
+case 'buy':{const price=Number(b.dataset.price);if(P.gold<price){log('돈이 부족합니다. 할부도 거절됐습니다.');break;}P.gold-=price;if(id==='수리 서비스'){P.durability=100;if(P.weapon==='부서진 무기')P.weapon='수리한 검';}else addItem(id);log(id+' 구매.');save();openShop();break;}
+case 'fusion':openFusion();break;
+case 'fuse':fuse();break;
+case 'map':openMap();break;
+case 'save':saveNotice();break;
+case 'sound':soundEnabled=!soundEnabled;openMenu();break;
+case 'reset':resetSave();break;
+}});
+function interact(){
+ if(!nearestNPC||modal||mathPending)return;const k=nearestNPC.kind;
+ if(k==='chief'){if(P.quest===0){if((P.bag['토끼 간']||0)>=10){spendItem('토끼 간',10);P.quest=1;P.gold+=300;gainXP(450);log('토끼 간 10개 전달. 이장: 고맙네. 사실 건강검진용이었어.');unlock('super');save();}else log('첫 퀘스트: 토끼 간 10개. 현재 '+(P.bag['토끼 간']||0)+'/10. M키로 토끼 사냥터 이동.');}else log('이장: 벌써 간은 충분하네. 본인 간부터 챙기게.');}
+ else if(k==='trainer')openSkills();else if(k==='jobs')openJobs();else if(k==='shop')openShop();else if(k==='map')openMap();else if(k==='return')enterArea('town');else if(k==='sermon'){P.divine=Math.min(100,P.divine+30);P.kindness++;log('설교를 들었습니다. 신성력 +30. 졸음은 무료입니다.');checkUnlocks();save();}else if(k==='help'){if(spendItem('약초',1)){P.divine=Math.min(100,P.divine+20);P.kindness++;P.gold+=15;gainXP(25);log('주민에게 약초 전달. 선행 +1, 신성력 +20.');checkUnlocks();save();}else log('주민: 약초 1개만 도와주세요.');}else if(k==='empty'){if(P.learned.some(id=>skillMap.get(id)?.effectKey==='burglary')){P.gold+=20;addItem('고철');log('빈집털이 보상. 집주인은 시스템입니다.');nearestNPC.kind='emptyUsed';}else log('빈집입니다. 도적의 빈집털이 스킬이 있으면 조사할 수 있습니다.');}else if(k==='corpse'){if(corpses.some(c=>c.human)){log('사체업자: 이미 한 구 대기 중입니다.');return;}const pos=nearestNPC.pos.clone().add(V(1,0,1)),node=mesh('box',0x938c82,[pos.x,.1,pos.z],[.6,.2,1.4],fxRoot);corpses.push({pos,node,until:clock+90,human:true});log('사체업자: 사람 시체입니다. 일으키면 유족 합의금 100G.');}
+}
+
+/* 입력 */
+function basicAttack(){if(!started||modal||mathPending||attackCD>clock)return;attackCD=clock+(P.job==='lancer'?.24:.42);let power=attackPower();if(P.job==='lancer'&&nearestEnemy(1.8))power*=.4;const c={pos:player.position.clone(),direction:aim.clone(),power,skill:{mult:1},scale:1};if(['archer','mage','gunner','warlock'].includes(P.job))shoot(c);else meleeHit(c,P.job==='lancer'?4.8:2.5);if(P.job==='error'&&Math.random()<.15)perform('random',{...c,power:power*1.4});P.durability=Math.max(0,P.durability-.1);if(P.durability<=0&&P.weapon!=='부서진 무기'){P.weapon='부서진 무기';log('무기가 파손됐습니다. 수리하거나 새 장비를 장착하세요.');}}
+function dodge(){if(!started||modal||mathPending||clock<dodgeCD)return;dodgeCD=clock+1;dodgeTime=.32;const direction=move.lengthSq()>.01?move.clone().normalize():aim.clone();moveBurstDirectional(direction,4);audio(180,.12,'triangle',.025,1.7);}
+function moveBurstDirectional(d,distance){player.position.add(d.multiplyScalar(distance));player.position.x=clamp(player.position.x,-32,32);player.position.z=clamp(player.position.z,-32,32);pulse(player.position,0xb5d6dd,1.2,.2);}
+addEventListener('keydown',e=>{if(e.target instanceof HTMLInputElement||e.target instanceof HTMLSelectElement)return;const k=e.key.toLowerCase();if([' ','arrowup','arrowdown','arrowleft','arrowright','tab'].includes(k))e.preventDefault();if(e.repeat)return;if(k==='escape'){if(mathPending){mathPending=null;$('math').style.display='none';return;}modal?closeModal():started&&openMenu();return;}if(!started||mathPending)return;if(k==='k'){modal==='skills'?closeModal():openSkills();return;}if(k==='j'){modal==='jobs'?closeModal():openJobs();return;}if(k==='i'){modal==='inventory'?closeModal():openInventory();return;}if(k==='m'){modal==='map'?closeModal():openMap();return;}if(modal)return;keys.add(k);if(k===' ')dodge();if(k==='e')interact();if(/^[1-8]$/.test(k))useSkill(P.slots[Number(k)-1]);});
+addEventListener('keyup',e=>keys.delete(e.key.toLowerCase()));addEventListener('blur',()=>{keys.clear();mouseDown=false;rightDrag=false;});renderer.domElement.addEventListener('contextmenu',e=>e.preventDefault());renderer.domElement.addEventListener('mousedown',e=>{if(e.button===2)rightDrag=true;if(e.button===0){mouseDown=true;basicAttack();}});addEventListener('mouseup',e=>{if(e.button===2)rightDrag=false;if(e.button===0)mouseDown=false;});addEventListener('mousemove',e=>{mouse.set(e.clientX/innerWidth*2-1,-e.clientY/innerHeight*2+1);if(rightDrag&&!modal&&!mathPending){yaw-=e.movementX*.006;pitch=clamp(pitch+e.movementY*.004,.3,1.2);}});
+$('skillbar').addEventListener('click',e=>{const b=e.target.closest('[data-slot-index]');if(b)useSkill(P.slots[Number(b.dataset.slotIndex)]);});
+function resetSave(){if(confirm('저장 데이터를 모두 지울까요?')){started=false;try{localStorage.removeItem(SAVE);}catch{}location.reload();}}
+$('resetButton').onclick=resetSave;$('startButton').onclick=()=>{started=true;$('start').style.display='none';audio(440,.12);enterArea(resumeArea);log('이장에게 E로 말을 걸어보세요. M은 지도, K는 스킬입니다.');};document.addEventListener('visibilitychange',()=>{if(document.hidden){keys.clear();mouseDown=false;if(started&&!modal&&!mathPending)openMenu();save();}});addEventListener('beforeunload',save);
+/* 업데이트 */
+function updateEnemies(dt){
+ const epoch=worldEpoch;
+ for(const e of enemies){
+  if(e.hp<=0)continue;const pos=e.g.position;e.g.scale.lerp(V(1,1,1).multiplyScalar(e.data.boss?1.7:1),Math.min(1,dt*18));pos.x=clamp(pos.x,-32,32);pos.z=clamp(pos.z,-32,32);
+  if(enemyHas(e,'dot')){e.dotTimer=(e.dotTimer||0)+dt;if(e.dotTimer>=1){e.dotTimer=0;deal(e,e.status.dot.value,{dot:true});if(e.hp<=0)continue;}}
+  e.timer-=dt;if(enemyHas(e,'stun')){e.state='chase';e.ring.visible=false;continue;}
+  let target=player.position,targetSummon=null;
+  if(!enemyHas(e,'taunt')){const decoy=summons.find(a=>a.hp>0&&a.kind==='scarecrow'&&a.g.position.distanceTo(pos)<12),pet=decoy||summons.find(a=>a.hp>0&&a.g.position.distanceTo(pos)<4);if(pet){target=pet.g.position;targetSummon=pet;}}
+  const delta=target.clone().sub(pos);delta.y=0;const dist=delta.length();if(dist>.01)e.g.rotation.y=Math.atan2(-delta.x,-delta.z);
+  const phase=e.data.boss?(e.hp/e.max<.3?3:e.hp/e.max<.65?2:1):1;
+  if(phase!==e.phase){e.phase=phase;pulse(pos,0xff8b72,6,.6);log(e.data.name+' '+phase+'페이즈. 협상의 여지가 줄었습니다.');}
+  const reach=e.data.boss?3.6:2,aggro=enemyHas(e,'taunt')?40:has('stealth')&&!targetSummon?2:17;
+  if(enemyHas(e,'fear')){if(dist<12)pos.addScaledVector(delta.normalize(),-e.data.speed*dt);e.ring.visible=false;continue;}
+  if(enemyHas(e,'confuse')){pos.x+=Math.sin(clock*2+e.serial)*dt*e.data.speed;pos.z+=Math.cos(clock*3+e.serial)*dt*e.data.speed;continue;}
+  if(e.state==='idle'){if(dist<aggro)e.state='chase';else if(e.timer<0){e.timer=rnd(1,3);pos.add(V(rnd(-.5,.5),0,rnd(-.5,.5)));}}
+  else if(e.state==='chase'){if(dist>aggro+6){e.state='idle';continue;}if(dist>reach*.8){const slow=enemyHas(e,'weak')?.75:1;pos.addScaledVector(delta.normalize(),e.data.speed*(1+(phase-1)*.12)*slow*dt);}else{e.state='attack';e.timer=Math.max(.4,(e.data.boss?.95:.7)-(phase-1)*.14);e.locked=target.clone();e.ring.visible=true;e.ring.scale.setScalar(reach/(e.data.boss?1.7:1));}}
+  else if(e.state==='attack'){
+   const telegraph=1+Math.sin(clock*30)*.08;e.ring.scale.setScalar(reach/(e.data.boss?1.7:1)*telegraph);
+   if(e.timer<=0){e.ring.visible=false;const hitRange=reach+.45;pulse(pos,0xff936b,reach,.25);const atk=e.data.atk*(1+(phase-1)*.15)*(enemyHas(e,'weak')?.6:1)*(enemyHas(e,'curse')?.7:1);if(targetSummon){if(targetSummon.g.position.distanceTo(pos)<hitRange)targetSummon.hp-=atk;}else if(player.position.distanceTo(pos)<hitRange)damagePlayer(atk,e);if(worldEpoch!==epoch)return;
+    if(e.data.boss&&phase>=2){const origin=pos.clone();schedule(.35,()=>{if(e.hp<=0)return;pulse(origin,0xff765d,6,.4);if(player.position.distanceTo(origin)<6)damagePlayer(atk*.7,e);});}e.state='recover';e.timer=phase===3?.55:.95;
+   }
+  }else if(e.state==='recover'&&e.timer<=0)e.state='chase';
+ }
+ enemies=enemies.filter(e=>e.hp>0);for(let i=respawns.length-1;i>=0;i--){if(respawns[i].at<=clock){const r=respawns[i];respawns.splice(i,1);spawnEnemy(r.id,r.pos);}}
+}
+function updateSummons(dt){for(const a of summons){if(a.hp<=0||a.until<clock){actors.remove(a.g);continue;}a.cd-=dt;const target=enemies.filter(e=>e.hp>0&&e.g.position.distanceTo(a.g.position)<13).sort((x,y)=>x.g.position.distanceTo(a.g.position)-y.g.position.distanceTo(a.g.position))[0];if(a.kind==='scarecrow')continue;const dest=target?target.g.position:player.position.clone().add(V(1,0,1)),d=dest.clone().sub(a.g.position);d.y=0;if(d.length()>(target?1.5:2)){a.g.position.addScaledVector(d.normalize(),dt*7);a.g.rotation.y=Math.atan2(-d.x,-d.z);}if(target&&target.g.position.distanceTo(a.g.position)<2&&a.cd<=0){a.cd=.85;deal(target,attackPower()*(has('petboost')?.95:.45),{});}}summons=summons.filter(a=>a.hp>0&&a.until>clock);P.pet=summons.some(a=>a.pet);}
+function updateShots(dt){for(let i=shots.length-1;i>=0;i--){const s=shots[i];s.life-=dt;const prev=s.node.position.clone();s.node.position.addScaledVector(s.direction,s.speed*dt);const segment=new THREE.Line3(prev,s.node.position.clone());let removed=false;for(const e of enemies){if(e.hp<=0||s.hit.has(e.serial))continue;const point=segment.closestPointToPoint(e.g.position.clone().add(V(0,.9,0)),true,V());if(point.distanceTo(e.g.position.clone().add(V(0,.9,0)))<e.radius+.35){s.hit.add(e.serial);deal(e,s.power,s);if(s.explode){pulse(s.node.position.clone().setY(0),0xffa36a,3,.4);for(const other of nearEnemies(s.node.position,3))if(other!==e)deal(other,s.power*.65,{burn:true});}if(!s.pierce){s.life=0;removed=true;break;}}}if(s.life<=0||removed){fxRoot.remove(s.node);shots.splice(i,1);}}}
+function updateFields(dt){for(let i=fields.length-1;i>=0;i--){const f=fields[i];f.node.rotation.z+=dt*.5;f.tick-=dt;if(f.tick<=0){f.tick=.75;if(f.type==='heal'){if(player.position.distanceTo(f.pos)<f.r)heal(12+P.level*1.5);for(const a of summons)if(a.g.position.distanceTo(f.pos)<f.r)a.hp=Math.min(a.max,a.hp+20);}else for(const e of nearEnemies(f.pos,f.r)){if(f.type==='trap'){statusEnemy(e,'stun',2);deal(e,f.power);f.until=clock;}else deal(e,f.power*.35,{dot:true,poison:f.type==='poison'});}}if(f.until<=clock){fxRoot.remove(f.node);fields.splice(i,1);}}}
+function updateFX(dt){
+ for(let i=effects.length-1;i>=0;i--){const f=effects[i];f.life-=dt;if(f.particle){f.velocity.y-=dt*12;f.node.position.addScaledVector(f.velocity,dt);f.node.scale.multiplyScalar(Math.max(.1,1-dt*2));}else if(!f.static){const progress=1-f.life/f.max,s=f.max>100?f.radius:f.radius*(.15+.85*progress);f.node.scale.setScalar(s);if(f.shape==='sphere')f.node.position.y+=dt*2;}if(f.life<=0){fxRoot.remove(f.node);effects.splice(i,1);}}
+ for(let i=corpses.length-1;i>=0;i--)if(corpses[i].until<clock){fxRoot.remove(corpses[i].node);corpses.splice(i,1);}
+ for(let i=uiFrames.length-1;i>=0;i--){const f=uiFrames[i];f.life-=dt;f.pos.y+=dt*.95;const p=f.pos.clone().project(camera);f.node.style.left=(p.x*.5+.5)*innerWidth+'px';f.node.style.top=(-p.y*.5+.5)*innerHeight+'px';f.node.style.opacity=String(Math.max(0,f.life/f.max));f.node.style.display=p.z>1?'none':'block';if(f.life<=0){f.node.remove();uiFrames.splice(i,1);}}
+}
+function updateHUD(){
+ $('jobName').textContent=getJob(P.job).name+(P.tier>=2?' II':'');$('level').textContent='Lv. '+P.level;$('hpText').textContent=Math.ceil(P.hp)+' / '+maxHP();$('mpText').textContent=Math.floor(P.mp)+' / '+maxMP();$('xpText').textContent=P.level===MAX_LEVEL?'MAX':Math.floor(P.xp)+' / '+needXP();$('hpBar').style.width=clamp(P.hp/maxHP()*100,0,100)+'%';$('mpBar').style.width=clamp(P.mp/maxMP()*100,0,100)+'%';$('xpBar').style.width=(P.level===MAX_LEVEL?100:P.xp/needXP()*100)+'%';$('divineUI').style.display=P.job==='priest'?'block':'none';$('divBar').style.width=P.divine+'%';$('divText').textContent=Math.floor(P.divine)+' / 100';$('goldText').textContent=P.gold+' G';$('buffText').textContent=Object.keys(buffs).filter(has).length+'개 효과 · 동료 '+summons.length;$('areaName').textContent=area.mark+' '+area.name;$('areaDesc').textContent=area.desc+' · 권장 Lv.'+area.level;
+ $('questText').innerHTML=P.quest===0?`첫 심부름<br><b>토끼 간 ${(P.bag['토끼 간']||0)} / 10</b><br>시작의 마을 이장에게 전달`:`첫 심부름 완료 ✓<br>☆ 다음 목표: 초보자의 무덤 감독관<br>누적 처치 ${P.kills} · 융합 ${P.fused}<br><span class="muted">Lv.20부터 2차 전직</span>`;
+ const signature=P.slots.join('|');if($('skillbar').dataset.signature!==signature){$('skillbar').dataset.signature=signature;$('skillbar').innerHTML=P.slots.slice(0,8).map((id,i)=>{const s=skillMap.get(id),icons={melee:'╱',area:'◉',projectile:'➶',buff:'◇',debuff:'◎',summon:'♧',move:'»',heal:'+',passive:'∞'};return `<div class="slot" data-slot-index="${i}" title="${s?escapeHTML(s.name):'K에서 등록'}"><span class="num">${i+1}</span><span class="icon">${s?icons[s.type]:'·'}</span><span class="name">${s?escapeHTML(s.name.replace(/[★☆]/g,'')):'미등록'}</span><div class="cd"></div></div>`;}).join('');}
+ [...$('skillbar').children].forEach((node,i)=>{const remaining=Math.max(0,(cd[P.slots[i]]||0)-clock);node.querySelector('.cd').style.display=remaining>0?'flex':'none';node.querySelector('.cd').textContent=remaining>0?remaining.toFixed(1):'';});
+ const boss=enemies.find(e=>e.data.boss&&e.hp>0&&e.g.position.distanceTo(player.position)<25);$('boss').style.display=boss?'block':'none';if(boss){$('bossName').textContent=boss.data.name+' · Lv.'+boss.data.level+' · PHASE '+boss.phase;$('bossFill').style.width=Math.max(0,boss.hp/boss.max*100)+'%';}
+ nearestNPC=npcs.filter(n=>n.kind!=='emptyUsed'&&n.pos.distanceTo(player.position)<3.4).sort((a,b)=>a.pos.distanceTo(player.position)-b.pos.distanceTo(player.position))[0]||null;$('prompt').style.display=nearestNPC&&!modal?'block':'none';if(nearestNPC)$('prompt').textContent='[E] '+nearestNPC.name;
+}
+function updatePlayer(dt){
+ move.set(0,0,0);const forward=V(-Math.sin(yaw),0,-Math.cos(yaw)),right=V(Math.cos(yaw),0,-Math.sin(yaw));if(keys.has('w'))move.add(forward);if(keys.has('s'))move.sub(forward);if(keys.has('d'))move.add(right);if(keys.has('a'))move.sub(right);if(move.lengthSq()>.01){move.normalize();player.position.addScaledVector(move,speed()*dt);walkPhase+=dt*12;holdTime=0;}else{walkPhase+=dt*2;holdTime+=dt;}player.position.x=clamp(player.position.x,-32,32);player.position.z=clamp(player.position.z,-32,32);ray.setFromCamera(mouse,camera);if(ray.ray.intersectPlane(plane,targetGround)){const d=targetGround.clone().sub(player.position);d.y=0;if(d.lengthSq()>.05)aim.copy(d.normalize());}if(!mouseDown&&move.lengthSq()>.1)aim.lerp(move,.12).normalize();player.rotation.y=Math.atan2(-aim.x,-aim.z);
+ const moving=move.lengthSq()>.01;legs.forEach((leg,i)=>leg.rotation.x=moving?Math.sin(walkPhase+i*Math.PI)*.7:0);body.position.y=1+(moving?Math.abs(Math.sin(walkPhase))*.06:Math.sin(clock*2)*.02);animalBody.visible=has('animal');body.visible=head.visible=cape.visible=weapon.visible=!has('animal');legs.forEach(l=>l.visible=!has('animal'));if(has('fly'))player.position.y=air+Math.sin(clock*3)*.1;else player.position.y=THREE.MathUtils.damp(player.position.y,0,10,dt);if(dodgeTime>0)dodgeTime-=dt;player.scale.setScalar(has('fish')?.7:1);if(mouseDown)basicAttack();P.mp=Math.min(maxMP(),P.mp+dt*(3+P.level*.04));if(area.id==='town')P.hp=Math.min(maxHP(),P.hp+dt*10);if(P.weapon==='성직자 성의')P.divine=Math.min(100,P.divine+dt*1.5);if(P.job==='vampire'&&area.bright){P.hp=0;die();}P.playtime+=dt;rollbackTimer+=dt;if(rollbackTimer>=5){rollbackTimer=0;lastRollback={pos:player.position.clone(),hp:P.hp};}
+}
+function updateCamera(dt){const target=player.position.clone().add(V(0,1,0)),distance=started?17:20,desired=target.clone().add(V(Math.sin(yaw)*Math.cos(pitch)*distance,Math.sin(pitch)*distance,Math.cos(yaw)*Math.cos(pitch)*distance));camera.position.lerp(desired,1-Math.exp(-dt*7));camera.lookAt(target);if(shake>0){camera.position.x+=rnd(-shake,shake);camera.position.y+=rnd(-shake,shake);shake=Math.max(0,shake-dt*1.8);}}
+let prev=performance.now();
+function frame(now){
+ requestAnimationFrame(frame);const realDT=Math.min(.05,(now-prev)/1000);prev=now;const paused=!started||modal||mathPending;let dt=paused?0:realDT;if(hitstop>0&&!paused){hitstop-=realDT;dt*=.08;}
+ if(!paused){clock+=dt;for(let i=scheduled.length-1;i>=0;i--){if(!scheduled[i])continue;if(scheduled[i].at<=clock){const task=scheduled[i];scheduled.splice(i,1);const epoch=worldEpoch;task.fn();if(worldEpoch!==epoch)break;}}updatePlayer(dt);updateEnemies(dt);updateSummons(dt);updateShots(dt);updateFields(dt);if(clock-lastSave>15){save();lastSave=clock;}}
+ updateFX(paused?0:realDT);updateCamera(realDT);$('hurt').style.opacity=String(Math.max(0,Number($('hurt').style.opacity||0)-realDT*1.8));if(!started){yaw+=realDT*.045;for(const n of npcs)n.g.rotation.y+=realDT*.2;}if(now-lastUI>90){updateHUD();lastUI=now;}if(mathPending){mathTimer+=realDT;if(mathTimer>.1){mathTimer=0;const elapsed=(performance.now()-mathPending.start)/1000;$('mathResult').textContent='연산 경과 '+elapsed.toFixed(1)+'초 · 권장 '+mathPending.limit+'초';}}renderer.render(scene,camera);
+}
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+window.addEventListener('error',e=>{console.error(e.error||e.message);});
+window.HWANJANG={DATA,get player(){return P;},get area(){return area;}};
+enterArea('town');camera.position.set(12,16,19);requestAnimationFrame(frame);
+</script>
+<script>
+/* 모듈 로딩 실패를 사용자에게 알립니다. */
+setTimeout(function(){if(!window.HWANJANG)document.getElementById('loadError').style.display='block';},12000);
+</script>
+</body></html>
