@@ -14,11 +14,19 @@
 #start{position:fixed;inset:0;z-index:20;background:linear-gradient(90deg,#081018f5 0%,#081018d9 40%,#08101815 100%);display:flex;align-items:center;padding:7vw}.intro{max-width:660px}.intro .eyebrow{margin-bottom:24px}.intro h1 em{font-style:normal;color:var(--lime)}.intro p{line-height:1.9;color:#a9beb5;font-size:15px;max-width:480px}.intro footer{margin-top:34px;display:flex;gap:25px;font-size:11px;color:#80998d}.intro button{margin-top:22px;padding:16px 25px}
 #modal{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;background:#03080bbf;backdrop-filter:blur(5px)}.window{width:min(1060px,94vw);max-height:88vh;overflow:auto;padding:26px;background:#111b23;border:1px solid #aecb9d30;border-radius:16px;box-shadow:0 30px 120px #000a}.windowHead{display:flex;justify-content:space-between;align-items:start;border-bottom:1px solid var(--line);padding-bottom:17px;margin-bottom:18px;gap:20px}.windowHead h2{margin:0}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:16px}.card{border:1px solid var(--line);background:#17242b;border-radius:10px;padding:15px}.card.active{border-color:var(--lime);background:#23332c}.card.locked{opacity:.6}.card p{font-size:12px;line-height:1.7;color:#a4b9af;margin:8px 0 12px}.card h3{margin-bottom:5px}.card small{font-size:10px;line-height:1.6}.card button{font-size:11px;padding:7px 9px;margin:4px 3px 0 0}.tabs{display:flex;gap:6px;flex-wrap:wrap}.tabs button{font-size:11px;padding:6px 10px}.tabs button.active{background:var(--lime);color:#15200b}.notice{padding:12px;background:#c4f56b0a;border-left:3px solid var(--lime);font-size:12px;color:#b9cbbd;line-height:1.8;margin:15px 0}
 #math{position:fixed;inset:0;z-index:40;background:#051018dc;display:none;align-items:center;justify-content:center}.mathbox{width:420px;text-align:center;padding:35px}#equation{font:800 40px monospace;color:var(--lime);margin:25px 0}#answer{background:#071218;border:1px solid #b9e28850;border-radius:7px;width:100%;padding:14px;color:white;text-align:center;font-size:25px}#mathResult{min-height:25px;font-size:12px;color:var(--muted);margin-top:10px}#loadError{position:fixed;bottom:10px;left:10px;color:#ff9292;background:#161b24;padding:15px;z-index:100;display:none}@keyframes appear{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}@media(max-width:1000px){#badge{display:none}#help{display:none}#status{width:230px;left:12px;top:12px}#region{right:12px;top:12px;width:205px}.slot{width:52px;height:65px}#logs{width:270px;font-size:10px;bottom:110px}}
+:root{--lime:#f2ce86;--muted:#a5b5b9;--panel:#14202beb;--line:#d5d4ba30}button{transition:background .16s,transform .16s;border-radius:5px}button:hover{transform:translateY(-1px)}button.primary{background:linear-gradient(135deg,#f1d49a,#c49a53);color:#222b31}.panel{border-radius:7px;background:linear-gradient(135deg,#1b2b38ee,#111c28eb);box-shadow:0 8px 28px #030b1470;border-color:#d1d7c32b;backdrop-filter:blur(8px)}#hud{background:linear-gradient(0deg,#07111e70,transparent 18%,transparent 85%,#06101b35)}#status{width:258px;padding:15px 17px;top:20px;left:20px;border-left:3px solid #e0bd77}#status>.eyebrow{font-size:8px;letter-spacing:2px}#jobName{font-size:20px}.statusHead{margin:7px 0 12px}#level{font-size:13px}.bar{height:5px;border-radius:1px;margin:4px 0 8px}.barLabel{font-size:10px}#hpBar{background:linear-gradient(90deg,#cc6267,#fa9585)}#mpBar{background:linear-gradient(90deg,#5487c7,#9bcaf7)}#xpBar{background:#d9bd75}#badge{font-size:12px;letter-spacing:5px;top:23px;font-family:Georgia,serif;color:#f3ddb0}#badge span{font-family:system-ui;letter-spacing:1px;color:#d4dfdf99}#region{width:225px;right:20px;top:173px;padding:16px}#region>.eyebrow:first-child{display:none}#region h3{font-size:17px;margin-top:0}#areaDesc{font-size:10px;line-height:1.6}#region>.eyebrow{font-size:8px}#questText{font-size:11px;line-height:1.9;margin-bottom:0}#questText b{font-size:13px;color:#f2d59d}#region>div[style]{margin:12px 0!important}
+#radarPanel{position:absolute;top:20px;right:20px;width:225px;height:140px;border:1px solid #d5d4ba30;border-radius:7px;overflow:hidden;background:#0e1c28ed;pointer-events:auto}#radar{width:225px;height:140px}#radarCaption{position:absolute;bottom:6px;left:10px;font-size:8px;letter-spacing:2px;color:#d3d5bd}#radarPanel button{position:absolute;right:7px;bottom:5px;padding:3px 7px;font-size:9px;background:#142a37}
+#skillbar{gap:5px;bottom:22px}.slot{width:60px;height:65px;border-radius:5px;background:linear-gradient(#253747f2,#14212ff5);border:1px solid #d5d1ae45;box-shadow:0 4px 12px #0005}.slot .num{color:#ebd49c;font-size:9px}.slot .icon{font:25px Georgia,serif;margin-top:4px;color:#cddbea}.slot .name{font-size:8px;color:#c5d0d4;margin-top:5px}.slot .cd{background:#071221c9;font-size:18px}.slot.noMana{opacity:.5}#resource{position:absolute;bottom:101px;left:50%;transform:translateX(-50%);width:265px;text-align:center}#resourceText{display:flex;justify-content:space-between;font-size:9px;color:#c3d5d2;margin-bottom:5px}#staminaTrack{height:4px;background:#101b29;border:1px solid #88baae30}#staminaFill{height:100%;width:100%;background:#88d7c5}#combatHint{font-size:10px;color:#c3d1d5;margin-top:8px;letter-spacing:.5px;text-shadow:0 2px 3px #000}#help{right:20px;bottom:19px;font-size:9px;line-height:2;color:#b1c3c8}#logs{bottom:30px;left:20px;width:285px;font-size:10px;line-height:1.7;max-height:100px;overflow:hidden}#logs div{color:#c2d3cf}#logs div:first-child{opacity:.4}#logs div:nth-child(2){opacity:.55}#toolbar{position:absolute;left:20px;top:239px;display:flex;gap:5px;pointer-events:auto}#toolbar button{font-size:10px;background:#142330e8;border-color:#d8d2af26;padding:7px 9px;color:#cfdbdb}#toolbar kbd{font-size:9px;margin-left:4px}
+#boss{width:360px;top:65px}#bossName{font-size:11px;letter-spacing:1px;color:#f2d8b4}#boss .bar{height:7px;border:1px solid #dbad7e55;padding:1px;border-radius:1px}#bossFill{background:linear-gradient(90deg,#bb586b,#f09a7b)}#prompt{top:72%;border-radius:4px;background:#152534ef;border-color:#d7c99a60;color:#f8e5ba;font-size:12px}#areaBanner{position:absolute;top:32%;left:50%;transform:translate(-50%,-50%);text-align:center;opacity:0;transition:opacity .35s;pointer-events:none;text-shadow:0 3px 16px #000}#areaBanner b{display:block;font:32px Georgia,serif;letter-spacing:5px;color:#f6e5bf}#areaBanner small{display:block;margin-top:9px;font-size:11px;letter-spacing:3px;color:#d2e1de}#toast{position:absolute;top:19%;left:50%;transform:translateX(-50%);max-width:500px;padding:12px 24px;text-align:center;background:#152c39ed;border:1px solid #d3b87960;border-radius:4px;opacity:0;transition:opacity .2s;color:#f3deb0;font-size:13px}#targetInfo{position:absolute;left:50%;top:108px;transform:translateX(-50%);font-size:10px;color:#e1d8c2;text-align:center}
+#start{background:linear-gradient(90deg,#0d1b2bed 0%,#0d1b2bbd 40%,#0d1b2b22 72%),linear-gradient(0deg,#07111ddd,transparent 35%);padding:5.5vw}.intro{max-width:480px}.intro .eyebrow{font-size:10px;letter-spacing:4px;color:#f0d399;margin-bottom:18px}.intro h1{font:900 clamp(44px,5.5vw,74px)/1.1 system-ui;letter-spacing:-4px;margin-bottom:18px}.intro h1 em{color:#f0cf8d}.intro p{font-size:13px;color:#b4c9cd;line-height:1.9;max-width:400px}.intro footer{margin-top:20px;gap:20px;color:#a5b6c0;font-size:10px}.intro button{padding:13px 24px;margin-top:15px}.intro #resetButton{font-size:10px;padding:10px 13px;background:#152b38a6;color:#a9bec6;border-color:#ffffff15}.classChoices{display:flex;gap:8px;margin:24px 0 4px}.classChoice{width:128px;padding:12px!important;margin:0!important;background:#152a39b0;border:1px solid #7395a647;text-align:left}.classChoice.selected{border-color:#f3cd85;background:#b092501c;box-shadow:inset 0 0 20px #d9b36c0d}.classChoice strong{font-size:14px;display:block;color:#f1e6ce;margin:5px 0}.classChoice span{font-size:9px;line-height:1.5;color:#a3bbc5;display:block}.classChoice i{font:28px Georgia,serif;color:#e1ca94;font-style:normal}.window{border-radius:7px;background:linear-gradient(140deg,#1b2b38,#111e2a);border-color:#cfbd8c45}.windowHead .eyebrow{font-size:9px}.card{background:#1b2b39;border-color:#d5d4ba26;border-radius:5px}.card.active{background:#c8af6010;border-color:#c9ae70}.tabs button{background:#263a48}.tabs button.active{background:#dac18e;color:#1a2832}.card p{color:#a8bdc7}.notice{background:#cfb37308;border-color:#ddc38a;color:#b7c9ce}.card select{max-width:100%;color:#e1dfca;background:#142733;padding:6px;border:1px solid #a7b4a945;border-radius:3px}.damage{font-size:18px;font-family:system-ui;filter:drop-shadow(0 2px 2px #0007)}
+@media(max-width:1000px){#status{width:218px;top:12px;left:12px;padding:12px}#toolbar{left:12px;top:221px}#radarPanel{right:12px;top:12px;width:185px;height:120px}#radar{width:185px;height:120px}#region{top:142px;right:12px;width:185px;padding:12px}#help{display:none}#logs{font-size:9px;width:200px;left:12px;bottom:12px}.slot{width:51px;height:59px}#resource{bottom:93px}#boss{top:25px;width:280px}#targetInfo{top:65px}}@media(max-height:650px){#region{top:146px}#region h3{font-size:14px}#areaDesc{display:none}#radarPanel{height:114px}#radar{height:114px}#logs{max-height:65px}.intro h1{font-size:46px}.intro p{font-size:11px}.classChoices{margin-top:15px}.intro footer{display:none}#toolbar{top:222px}}
+
+#region{pointer-events:auto}
 </style>
 </head><body>
 <div id="hud">
-<div id="badge">HWANJANG / ONLINE<span>정상적인 모험은 취급하지 않습니다</span></div>
-<section id="status" class="panel"><div class="eyebrow">ADVENTURER LICENSE · NO. 0001</div><div class="statusHead"><span id="jobName">초보자</span><b id="level">Lv. 1</b></div>
+<div id="badge">HWANJANG RPG<span>모험가 길드 · 엉뚱하지만 진지한 모험</span></div>
+<section id="status" class="panel"><div class="eyebrow">ADVENTURER · 모험가의 기록</div><div class="statusHead"><span id="jobName">초보자</span><b id="level">Lv. 1</b></div>
 <div class="barLabel"><span>생명력</span><span id="hpText"></span></div><div class="bar"><div class="fill" id="hpBar"></div></div>
 <div class="barLabel"><span>마나</span><span id="mpText"></span></div><div class="bar"><div class="fill" id="mpBar"></div></div>
 <div class="barLabel"><span>경험치</span><span id="xpText"></span></div><div class="bar"><div class="fill" id="xpBar"></div></div>
@@ -26,9 +34,9 @@
 <div class="barLabel"><span id="goldText"></span><span id="buffText"></span></div></section>
 <section id="region" class="panel"><div class="eyebrow">CURRENT DESTINATION</div><h3 id="areaName"></h3><small id="areaDesc"></small><div style="border-top:1px solid var(--line);margin:15px 0 10px"></div><div class="eyebrow">QUEST / 모험에는 사정이 있다</div><p id="questText"></p></section>
 <div id="boss"><div id="bossName"></div><div class="bar"><div class="fill" id="bossFill"></div></div></div><div id="logs"></div><div id="prompt"></div><div id="skillbar"></div>
-<div id="help"><kbd>WASD</kbd> 이동　<kbd>우클릭 드래그</kbd> 카메라<br><kbd>좌클릭</kbd> 공격　<kbd>Space</kbd> 회피　<kbd>E</kbd> 대화<br><kbd>K</kbd> 스킬　<kbd>J</kbd> 전직　<kbd>I</kbd> 가방　<kbd>M</kbd> 지도</div>
-<div id="floatLayer"></div><div id="hurt"></div><div id="flash"></div></div>
-<div id="start"><div class="intro"><div class="eyebrow">A VERY UNREASONABLE ADVENTURE</div><h1>환장 <em>RPG.</em><br>취업부터<br>잘못됐다.</h1><p>토끼 간 열 개만 구하면 된다고 했다.<br>그런데 옆집 마법사는 수학을 풀고, 힐러는 수술 동의서를 받는다.<br>당신의 모험도 아마 정상은 아닐 것이다.</p><button class="primary" id="startButton">모험 시작하기　↗</button><button id="resetButton">저장 초기화</button><footer><span>28개 직업 단계</span><span>8개 지역</span><span>계산하는 마법사</span></footer><p style="font-size:11px;margin-top:22px">PC · 마우스/키보드 · 자동 저장 · ★ 제공 설정 / ☆ 추가 설정</p></div></div>
+<div id="help"><kbd>WASD</kbd> 이동　<kbd>우클릭 드래그</kbd> 카메라<br><kbd>좌클릭</kbd> 콤보 · <kbd>Tab</kbd> 대상 고정　<kbd>Space</kbd> 회피　<kbd>E</kbd> 대화<br><kbd>Q</kbd> 포션 · <kbd>K</kbd> 스킬　<kbd>J</kbd> 전직　<kbd>I</kbd> 가방　<kbd>M</kbd> 지도</div>
+<div id="radarPanel"><canvas id="radar" width="450" height="280"></canvas><span id="radarCaption">GUILD EXPLORER · N ↑</span><button id="radarOpen">지도 M</button></div><nav id="toolbar"><button id="navBag">가방 <kbd>I</kbd></button><button id="navSkills">스킬 <kbd>K</kbd></button><button id="navJobs">전직 <kbd>J</kbd></button><button id="navMenu">☰</button></nav><div id="resource"><div id="resourceText"><span>회피 기력 · Space</span><span id="staminaText">100 / 100</span></div><div id="staminaTrack"><div id="staminaFill"></div></div><div id="combatHint"></div></div><div id="areaBanner"></div><div id="toast"></div><div id="targetInfo"></div><div id="floatLayer"></div><div id="hurt"></div><div id="flash"></div></div>
+<div id="start"><div class="intro"><div class="eyebrow">THE ADVENTURERS' GUILD · CHAPTER 01</div><h1>환장 <em>RPG</em><br>오늘도, 무사히.</h1><p>작은 마을에서 시작하는 아주 수상한 모험.<br>칼을 휘두르고, 공격을 피하고, 말도 안 되는 직업을 완성하세요.</p><div class="classChoices" id="classChoices"><button class="classChoice selected" data-starter="warrior"><i>⚔</i><strong>전사</strong><span>근접 · 회전 공격<br>가장 든든한 첫 모험</span></button><button class="classChoice" data-starter="archer"><i>➶</i><strong>궁수</strong><span>원거리 · 연속 사격<br>거리를 지키는 사냥꾼</span></button><button class="classChoice" data-starter="mage"><i>✦</i><strong>마법사</strong><span>마법 · 연산 시전<br>정답일수록 강한 한 방</span></button></div><button class="primary" id="startButton">길드에 등록하기　→</button> <button id="resetButton">새로 시작</button><footer><span>WASD 이동</span><span>좌클릭 공격</span><span>Space 회피</span><span>E 대화</span></footer><p style="font-size:10px;margin-top:18px;color:#92aab4">별도 설치 없이 플레이 · 자동 저장 · PC 키보드/마우스</p></div></div>
 <div id="modal"><div class="window" id="window"></div></div>
 <div id="math"><form class="panel mathbox" id="mathForm"><div class="eyebrow">MAGIC COMPUTATION</div><h2 id="mathName"></h2><small>정답과 풀이 속도가 마법 위력을 결정합니다.</small><div id="equation"></div><input id="answer" autocomplete="off" inputmode="numeric" placeholder="정답 입력"><div id="mathResult"></div><button class="primary" type="submit">연산 완료</button><button type="button" id="cancelMath">취소</button></form></div>
 <div id="loadError">Three.js를 불러오지 못했습니다. 인터넷 연결과 CDN 접근을 확인하세요.</div>
@@ -633,7 +641,7 @@ function interact(){
 function basicAttack(){if(!started||modal||mathPending||attackCD>clock)return;attackCD=clock+(P.job==='lancer'?.24:.42);let power=attackPower();if(P.job==='lancer'&&nearestEnemy(1.8))power*=.4;const c={pos:player.position.clone(),direction:aim.clone(),power,skill:{mult:1},scale:1};if(['archer','mage','gunner','warlock'].includes(P.job))shoot(c);else meleeHit(c,P.job==='lancer'?4.8:2.5);if(P.job==='error'&&Math.random()<.15)perform('random',{...c,power:power*1.4});P.durability=Math.max(0,P.durability-.1);if(P.durability<=0&&P.weapon!=='부서진 무기'){P.weapon='부서진 무기';log('무기가 파손됐습니다. 수리하거나 새 장비를 장착하세요.');}}
 function dodge(){if(!started||modal||mathPending||clock<dodgeCD)return;dodgeCD=clock+1;dodgeTime=.32;const direction=move.lengthSq()>.01?move.clone().normalize():aim.clone();moveBurstDirectional(direction,4);audio(180,.12,'triangle',.025,1.7);}
 function moveBurstDirectional(d,distance){player.position.add(d.multiplyScalar(distance));player.position.x=clamp(player.position.x,-32,32);player.position.z=clamp(player.position.z,-32,32);pulse(player.position,0xb5d6dd,1.2,.2);}
-addEventListener('keydown',e=>{if(e.target instanceof HTMLInputElement||e.target instanceof HTMLSelectElement)return;const k=e.key.toLowerCase();if([' ','arrowup','arrowdown','arrowleft','arrowright','tab'].includes(k))e.preventDefault();if(e.repeat)return;if(k==='escape'){if(mathPending){mathPending=null;$('math').style.display='none';return;}modal?closeModal():started&&openMenu();return;}if(!started||mathPending)return;if(k==='k'){modal==='skills'?closeModal():openSkills();return;}if(k==='j'){modal==='jobs'?closeModal():openJobs();return;}if(k==='i'){modal==='inventory'?closeModal():openInventory();return;}if(k==='m'){modal==='map'?closeModal():openMap();return;}if(modal)return;keys.add(k);if(k===' ')dodge();if(k==='e')interact();if(/^[1-8]$/.test(k))useSkill(P.slots[Number(k)-1]);});
+addEventListener('keydown',e=>{if((e.target instanceof HTMLInputElement||e.target instanceof HTMLSelectElement)&&e.key!=='Escape')return;const k=e.key.toLowerCase();if([' ','arrowup','arrowdown','arrowleft','arrowright','tab'].includes(k))e.preventDefault();if(e.repeat)return;if(k==='escape'){if(mathPending){mathPending=null;$('math').style.display='none';return;}modal?closeModal():started&&openMenu();return;}if(!started||mathPending)return;if(k==='k'){modal==='skills'?closeModal():openSkills();return;}if(k==='j'){modal==='jobs'?closeModal():openJobs();return;}if(k==='i'){modal==='inventory'?closeModal():openInventory();return;}if(k==='m'){modal==='map'?closeModal():openMap();return;}if(modal)return;keys.add(k);if(k===' ')dodge();if(k==='e')interact();if(/^[1-8]$/.test(k))useSkill(P.slots[Number(k)-1]);});
 addEventListener('keyup',e=>keys.delete(e.key.toLowerCase()));addEventListener('blur',()=>{keys.clear();mouseDown=false;rightDrag=false;});renderer.domElement.addEventListener('contextmenu',e=>e.preventDefault());renderer.domElement.addEventListener('mousedown',e=>{if(e.button===2)rightDrag=true;if(e.button===0){mouseDown=true;basicAttack();}});addEventListener('mouseup',e=>{if(e.button===2)rightDrag=false;if(e.button===0)mouseDown=false;});addEventListener('mousemove',e=>{mouse.set(e.clientX/innerWidth*2-1,-e.clientY/innerHeight*2+1);if(rightDrag&&!modal&&!mathPending){yaw-=e.movementX*.006;pitch=clamp(pitch+e.movementY*.004,.3,1.2);}});
 $('skillbar').addEventListener('click',e=>{const b=e.target.closest('[data-slot-index]');if(b)useSkill(P.slots[Number(b.dataset.slotIndex)]);});
 function resetSave(){if(confirm('저장 데이터를 모두 지울까요?')){started=false;try{localStorage.removeItem(SAVE);}catch{}location.reload();}}
@@ -650,7 +658,7 @@ function updateEnemies(dt){
   const delta=target.clone().sub(pos);delta.y=0;const dist=delta.length();if(dist>.01)e.g.rotation.y=Math.atan2(-delta.x,-delta.z);
   const phase=e.data.boss?(e.hp/e.max<.3?3:e.hp/e.max<.65?2:1):1;
   if(phase!==e.phase){e.phase=phase;pulse(pos,0xff8b72,6,.6);log(e.data.name+' '+phase+'페이즈. 협상의 여지가 줄었습니다.');}
-  const reach=e.data.boss?3.6:2,aggro=enemyHas(e,'taunt')?40:has('stealth')&&!targetSummon?2:17;
+  const reach=e.data.boss?3.6:2,aggro=enemyHas(e,'taunt')?40:has('stealth')&&!targetSummon?2:(e.data.boss?11:6.8);
   if(enemyHas(e,'fear')){if(dist<12)pos.addScaledVector(delta.normalize(),-e.data.speed*dt);e.ring.visible=false;continue;}
   if(enemyHas(e,'confuse')){pos.x+=Math.sin(clock*2+e.serial)*dt*e.data.speed;pos.z+=Math.cos(clock*3+e.serial)*dt*e.data.speed;continue;}
   if(e.state==='idle'){if(dist<aggro)e.state='chase';else if(e.timer<0){e.timer=rnd(1,3);pos.add(V(rnd(-.5,.5),0,rnd(-.5,.5)));}}
@@ -658,7 +666,7 @@ function updateEnemies(dt){
   else if(e.state==='attack'){
    const telegraph=1+Math.sin(clock*30)*.08;e.ring.scale.setScalar(reach/(e.data.boss?1.7:1)*telegraph);
    if(e.timer<=0){e.ring.visible=false;const hitRange=reach+.45;pulse(pos,0xff936b,reach,.25);const atk=e.data.atk*(1+(phase-1)*.15)*(enemyHas(e,'weak')?.6:1)*(enemyHas(e,'curse')?.7:1);if(targetSummon){if(targetSummon.g.position.distanceTo(pos)<hitRange)targetSummon.hp-=atk;}else if(player.position.distanceTo(pos)<hitRange)damagePlayer(atk,e);if(worldEpoch!==epoch)return;
-    if(e.data.boss&&phase>=2){const origin=pos.clone();schedule(.35,()=>{if(e.hp<=0)return;pulse(origin,0xff765d,6,.4);if(player.position.distanceTo(origin)<6)damagePlayer(atk*.7,e);});}e.state='recover';e.timer=phase===3?.55:.95;
+    if(e.data.boss&&phase>=2){const origin=pos.clone();pulse(origin,0xe6b477,6,.85);schedule(.85,()=>{if(e.hp<=0)return;pulse(origin,0xff765d,6,.4);if(player.position.distanceTo(origin)<6)damagePlayer(atk*.7,e);});}e.state='recover';e.timer=phase===3?.55:.95;
    }
   }else if(e.state==='recover'&&e.timer<=0)e.state='chase';
  }
@@ -674,7 +682,6 @@ function updateFX(dt){
 }
 function updateHUD(){
  $('jobName').textContent=getJob(P.job).name+(P.tier>=2?' II':'');$('level').textContent='Lv. '+P.level;$('hpText').textContent=Math.ceil(P.hp)+' / '+maxHP();$('mpText').textContent=Math.floor(P.mp)+' / '+maxMP();$('xpText').textContent=P.level===MAX_LEVEL?'MAX':Math.floor(P.xp)+' / '+needXP();$('hpBar').style.width=clamp(P.hp/maxHP()*100,0,100)+'%';$('mpBar').style.width=clamp(P.mp/maxMP()*100,0,100)+'%';$('xpBar').style.width=(P.level===MAX_LEVEL?100:P.xp/needXP()*100)+'%';$('divineUI').style.display=P.job==='priest'?'block':'none';$('divBar').style.width=P.divine+'%';$('divText').textContent=Math.floor(P.divine)+' / 100';$('goldText').textContent=P.gold+' G';$('buffText').textContent=Object.keys(buffs).filter(has).length+'개 효과 · 동료 '+summons.length;$('areaName').textContent=area.mark+' '+area.name;$('areaDesc').textContent=area.desc+' · 권장 Lv.'+area.level;
- $('questText').innerHTML=P.quest===0?`첫 심부름<br><b>토끼 간 ${(P.bag['토끼 간']||0)} / 10</b><br>시작의 마을 이장에게 전달`:`첫 심부름 완료 ✓<br>☆ 다음 목표: 초보자의 무덤 감독관<br>누적 처치 ${P.kills} · 융합 ${P.fused}<br><span class="muted">Lv.20부터 2차 전직</span>`;
  const signature=P.slots.join('|');if($('skillbar').dataset.signature!==signature){$('skillbar').dataset.signature=signature;$('skillbar').innerHTML=P.slots.slice(0,8).map((id,i)=>{const s=skillMap.get(id),icons={melee:'╱',area:'◉',projectile:'➶',buff:'◇',debuff:'◎',summon:'♧',move:'»',heal:'+',passive:'∞'};return `<div class="slot" data-slot-index="${i}" title="${s?escapeHTML(s.name):'K에서 등록'}"><span class="num">${i+1}</span><span class="icon">${s?icons[s.type]:'·'}</span><span class="name">${s?escapeHTML(s.name.replace(/[★☆]/g,'')):'미등록'}</span><div class="cd"></div></div>`;}).join('');}
  [...$('skillbar').children].forEach((node,i)=>{const remaining=Math.max(0,(cd[P.slots[i]]||0)-clock);node.querySelector('.cd').style.display=remaining>0?'flex':'none';node.querySelector('.cd').textContent=remaining>0?remaining.toFixed(1):'';});
  const boss=enemies.find(e=>e.data.boss&&e.hp>0&&e.g.position.distanceTo(player.position)<25);$('boss').style.display=boss?'block':'none';if(boss){$('bossName').textContent=boss.data.name+' · Lv.'+boss.data.level+' · PHASE '+boss.phase;$('bossFill').style.width=Math.max(0,boss.hp/boss.max*100)+'%';}
@@ -693,6 +700,220 @@ function frame(now){
 }
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
 window.addEventListener('error',e=>{console.error(e.error||e.message);});
+/* V2: 읽히는 전투, 단계별 의뢰, 길드 마을 */
+P.clearedBosses??=[];P.claimedContracts??=[];P.questAccepted??=P.quest>0;
+let stamina=100,dashVector=V(),dashRemaining=0,comboStep=0,lastCombo=-10,comboUntil=0,hurtUntil=0,lockedTarget=null;
+let objectiveTimer=0,toastTimer=0,bannerTimer=0,environmentClock=0,footstepTimer=0;
+let colliders=[],lootNodes=[],labels=[],localTextures=[],ambients=[],newPlayerParts=[];
+const npcMarkers=new Map();
+const visualGeo={circle:new THREE.CircleGeometry(1,48),slash:new THREE.TorusGeometry(1,.045,5,32,Math.PI*1.2)};
+renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
+sun.intensity=2.5;sun.color.setHex(0xffe4af);sun.position.set(-18,28,15);
+scene.children.find(n=>n.isHemisphereLight).intensity=2.1;
+yaw=0;pitch=.9;
+function toast(message){$('toast').textContent=message;$('toast').style.opacity='1';toastTimer=3.5;}
+function label3D(text,color='#f5e2af',width=3){
+ const canvas=document.createElement('canvas');canvas.width=384;canvas.height=80;const c=canvas.getContext('2d');
+ c.fillStyle='#11212ee8';c.beginPath();c.roundRect(8,12,368,54,10);c.fill();c.strokeStyle='#d1c29a50';c.stroke();c.fillStyle=color;c.font='bold 23px "Malgun Gothic",sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText(text,192,40);
+ const t=new THREE.CanvasTexture(canvas);t.colorSpace=THREE.SRGBColorSpace;localTextures.push(t);
+ const material=new THREE.SpriteMaterial({map:t,depthTest:false,transparent:true});const sprite=new THREE.Sprite(material);sprite.scale.set(width,width*80/384,1);labels.push(sprite);return sprite;
+}
+function groundCircle(parent,x,z,r,color,opacity=1,y=.045){const material=new THREE.MeshBasicMaterial({color,transparent:opacity<1,opacity,depthWrite:false});const m=new THREE.Mesh(visualGeo.circle,material);m.rotation.x=-Math.PI/2;m.position.set(x,y,z);m.scale.setScalar(r);m.userData.disposableMaterial=true;parent.add(m);return m;}
+function post(x,z){mesh('box',0x374345,[x,1.1,z],[.17,2.2,.17]);mesh('box',0xe4bd75,[x,2.1,z],[.4,.45,.4],world,true);mesh('cone',0x394952,[x,2.43,z],[.4,.25,.4]);}
+function cottage(x,z,color,w=5,h=3){
+ mesh('box',0x333e43,[x,.12,z],[w+.35,.25,4.35]);mesh('box',color,[x,h/2+.25,z],[w,h,4]);
+ const roof=mesh('cone',0x465967,[x,h+1,z],[w*.83,2.2,3.9]);roof.rotation.y=Math.PI/4;
+ mesh('box',0x34434a,[x,.9,z-2.03],[1,1.8,.08]);mesh('box',0xddbc80,[x,1.6,z-2.1],[.7,.8,.08],world,true);
+ for(const side of [-1,1]){mesh('box',0x63716c,[x+side*w*.46,h/2,z-2.02],[.18,h,.15]);mesh('box',0xf2d58b,[x+side*w*.28,1.9,z-2.04],[.65,.65,.1],world,true);}
+ mesh('box',0x69746c,[x+w*.23,h+1.3,z+.4],[.65,1.8,.65]);colliders.push({x,z,w:w/2+.45,h:2.4});
+}
+function stylizedTree(x,z,scale=1,color=0x477565){
+ const g=new THREE.Group();world.add(g);g.position.set(x,0,z);g.scale.setScalar(scale);mesh('cylinder',0x6e6450,[0,1,0],[.19,2,.19],g);mesh('sphere',color,[0,2.6,0],[1.35,1.7,1.25],g);mesh('sphere',color,[.65,2.5,.2],[.8,1,.8],g);colliders.push({x,z,r:.5*scale});
+}
+function resolveCollision(position,radius=.42){
+ position.x=clamp(position.x,-29.2,29.2);position.z=clamp(position.z,-29.2,29.2);
+ for(const b of colliders){
+  if(b.r){const d=V(position.x-b.x,0,position.z-b.z),dist=d.length();if(dist<b.r+radius){if(dist<.001)d.set(1,0,0);position.addScaledVector(d.normalize(),b.r+radius-dist);}}
+  else{const qx=clamp(position.x,b.x-b.w,b.x+b.w),qz=clamp(position.z,b.z-b.h,b.z+b.h),dx=position.x-qx,dz=position.z-qz,dist=Math.hypot(dx,dz);if(dist>0&&dist<radius){position.x+=dx/dist*(radius-dist);position.z+=dz/dist*(radius-dist);}else if(dist===0){const ox=b.w+radius-Math.abs(position.x-b.x),oz=b.h+radius-Math.abs(position.z-b.z);if(ox<oz)position.x+=(position.x>=b.x?1:-1)*ox;else position.z+=(position.z>=b.z?1:-1)*oz;}}
+ }
+}
+function deterministic(i){const n=Math.sin(i*127.1+area.level*61.7)*43758.5453;return n-Math.floor(n);}
+function newWorld(){
+ for(const sprite of labels)sprite.material.dispose();labels=[];for(const t of localTextures)t.dispose();localTextures=[];
+ world.traverse(o=>{if(o.userData.disposableMaterial)o.material.dispose();});clearGroup(world);colliders=[];lootNodes=[];ambients=[];npcs=[];npcMarkers.clear();
+ const town=area.id==='town';const palette={town:[0x657c69,0x37534e,0x455e6c],rabbit:[0x698868,0x3f6253,0x496c72],deer:[0x8a8e65,0x5f7056,0x747d74],ship:[0x516978,0x344653,0x42596d],ice:[0xa2c4c9,0x557e94,0x859eaf],dragon:[0x62637b,0x3c3d5a,0x4c4969],popcorn:[0x827563,0x48475b,0x55506b],grave:[0x6d7d76,0x3f5150,0x4c636a]}[area.id];
+ scene.background=new THREE.Color(palette[2]);scene.fog=new THREE.Fog(palette[2],38,100);
+ mesh('box',palette[1],[0,-1.15,0],[64,2.3,64]);mesh('box',palette[0],[0,-.13,0],[61,.25,61]);
+ /* 배경 산은 실루엣으로 구역 경계를 보여줍니다. */
+ for(let i=0;i<12;i++){const a=i/12*Math.PI*2;mesh('cone',palette[1],[Math.cos(a)*43,-1,Math.sin(a)*43],[7,12+deterministic(i)*10,7]);}
+ const pathColor=town?0xb0aa8c:area.id==='ice'?0xc3dce0:0x9a9e7a;
+ mesh('box',pathColor,[0,.012,0],[4.8,.035,60]);mesh('box',pathColor,[0,.014,0],[57,.035,4.5]);
+ if(town){
+  groundCircle(world,0,0,7.8,0x8f9b8a);groundCircle(world,0,0,5.3,0x647e79);
+  for(let i=0;i<32;i++){const a=i/32*Math.PI*2;const m=mesh('box',0xc3b797,[Math.cos(a)*7.5,.06,Math.sin(a)*7.5],[.65,.1,1]);m.rotation.y=-a;}
+  /* 전직 기념비와 네 방향 길 */
+  mesh('cylinder',0xa8b3a2,[0,.2,0],[1.8,.4,1.8]);mesh('cylinder',0x637982,[0,.65,0],[1.3,.6,1.3]);
+  const crystal=mesh('cone',0x9cdecb,[0,2.05,0],[.65,2.2,.65],world,true);crystal.rotation.z=.2;ambients.push({node:crystal,baseY:2.05,kind:'crystal'});
+  cottage(-11,-9,0xc0b9a0,6);cottage(11,-10,0x9baab0,6,4.3);cottage(-13,9,0xb8a68c,6);cottage(13,9,0x99a69d,6);cottage(0,-21,0xbbbba8,8,4);
+  const npcData=[['마을 이장',-6,-4,0xc8ac71,'chief'],['훈련관',6,-4,0x98b898,'trainer'],['전직 안내원',0,-15,0xb7a1d5,'jobs'],['잡화 상인',-9,5,0xdcbd87,'shop'],['성당 · 설교',9,5,0xe0d3a5,'sermon'],['도움이 필요한 주민',-5,10,0x7fb7b0,'help'],['빈집',-19,-5,0x899992,'empty'],['사체업자',19,-5,0x93b4b3,'corpse']];
+  for(const n of npcData)addNPC(...n);
+  addNPC('토끼 사냥터로',0,19,0xb6c886,'gate');
+  for(const z of [-16,-7,7,16])for(const x of [-3.7,3.7])post(x,z);
+ }else{
+  /* 안전 입구 → 소규모 전투 캠프 → 보스 원형 경기장 */
+  groundCircle(world,0,22,4.6,0x698881,.75);addNPC('길드 귀환석',0,25,0xa8cec3,'return');
+  groundCircle(world,0,-19,8,area.id==='ice'?0xb6d5dc:0x92977f,.8);
+  for(let i=0;i<18;i++){const a=i/18*Math.PI*2;const x=Math.cos(a)*8,z=-19+Math.sin(a)*8;mesh('box',0x737e7b,[x,.16,z],[.7,.3,.7]);}
+  for(const pos of [[-11,9],[11,3],[-10,-7],[12,-12]]){groundCircle(world,pos[0],pos[1],3.4,palette[1],.2);}
+  for(const e of enemies){if(e.data.boss)e.g.position.set(0,0,-19);else{const camps=[[-11,9],[11,3],[-10,-7],[12,-12]],camp=camps[e.serial%4];e.g.position.set(camp[0]+rnd(-2.5,2.5),0,camp[1]+rnd(-2,2));}e.origin.copy(e.g.position);}
+  for(const [x,z]of [[-18,3],[18,-4]]){const node=new THREE.Group();world.add(node);node.position.set(x,0,z);mesh('box',0x967852,[0,.4,0],[1.2,.8,.8],node);mesh('box',0xe1bc70,[0,.5,-.42],[.25,.3,.08],node,true);lootNodes.push({node,pos:node.position,opened:false});}
+  post(-3.7,20);post(3.7,20);
+ }
+ for(let i=0;i<32;i++){const x=(deterministic(i+70)-.5)*56,z=(deterministic(i+110)-.5)*56;if(Math.abs(x)<6||Math.abs(z)<4)continue;if(town&&Math.abs(x)<20&&Math.abs(z)<24)continue;
+  if(['town','rabbit','deer'].includes(area.id))stylizedTree(x,z,.75+deterministic(i+160)*.8,area.id==='deer'?0x7c8959:0x44745b);
+  else{mesh(area.id==='ice'?'cone':'box',palette[1],[x,.55,z],[.6+deterministic(i),1+deterministic(i+13),.7]);colliders.push({x,z,r:.7});}
+ }
+ /* 草과 바닥 조각은 인스턴스로 묶어 렌더링합니다. */
+ const blades=new THREE.InstancedMesh(geo.cone,mat(town?0x87976a:palette[1]),180),dummy=new THREE.Object3D();
+ for(let i=0;i<180;i++){const x=(deterministic(i+200)-.5)*58,z=(deterministic(i+500)-.5)*58;dummy.position.set(x,Math.abs(x)<3||Math.abs(z)<3?-2:.12,z);dummy.scale.set(.06,.28+deterministic(i+20)*.25,.06);dummy.rotation.y=i;dummy.updateMatrix();blades.setMatrixAt(i,dummy.matrix);}world.add(blades);
+ for(const n of npcs){const title=label3D(n.name,n.kind==='chief'?'#f2d49a':'#d0e7dd',3.6);title.position.set(0,3.1,0);n.g.add(title);npcMarkers.set(n.kind,n);}
+ const portalPos=town?V(0,0,19):V(0,0,25);for(let i=0;i<2;i++){const r=mesh('ring',0xa1daca,[portalPos.x,.08+i*.04,portalPos.z],[2+i*.3,2+i*.3,2+i*.3],world,true);r.rotation.x=Math.PI/2;ambients.push({node:r,kind:'portal'});}
+}
+const previousEnterArea=enterArea;
+enterArea=function(id){lockedTarget=null;dashRemaining=0;stamina=100;comboStep=0;previousEnterArea(id);newWorld();if(started){$('areaBanner').innerHTML=`<b>${area.name}</b><small>${area.id==='town'?'모험가 길드 · 안전 구역':'권장 Lv.'+area.level+' · '+(area.bright?'햇빛 구역':'그늘 구역')}</small>`;$('areaBanner').style.opacity='1';bannerTimer=2.4;}$('targetInfo').textContent='';};
+const originalBuildPlayer=buildPlayer;
+buildPlayer=function(){originalBuildPlayer();const color=getJob(P.job).color;newPlayerParts=[];
+ mesh('sphere',0x343b43,[0,1.79,.04],[.28,.16,.24],player);mesh('box',0xc4b592,[0,1.28,-.205],[.45,.18,.07],player);mesh('box',0x665944,[0,.73,-.2],[.63,.1,.08],player);mesh('box',0xe4ce89,[0,.73,-.25],[.12,.12,.07],player);
+ for(const x of[-.43,.43])mesh('sphere',color,[x,1.25,0],[.22,.16,.22],player);
+ weapon.scale.set(.1,.12,1.35);weapon.position.set(.48,.95,-.45);
+ const outline=mesh('ring',0xa4e5d0,[0,.035,0],[.67,.67,.67],player,true);outline.rotation.x=Math.PI/2;
+ const shadow=groundCircle(player,0,0,.57,0x183132,.28,.025);shadow.userData.disposableMaterial=true;
+};buildPlayer();
+/* 적 체력 바는 월드에 고정해 과도한 UI를 피합니다. */
+const previousSpawn=spawnEnemy;
+spawnEnemy=function(id,pos){const e=previousSpawn(id,pos);if(!e)return;e.healthUI=new THREE.Group();e.healthUI.position.set(0,e.data.boss?2.9:2,0);e.g.add(e.healthUI);mesh('box',0x26383c,[0,0,0],[.95,.085,.06],e.healthUI);e.healthFill=mesh('box',e.data.boss?0xe7997f:0xf4d09a,[0,0,-.04],[.9,.055,.04],e.healthUI,true);e.healthUI.visible=false;return e;};
+function objective(){
+ if(!P.questAccepted&&!P.quest)return {title:'길드의 첫 심부름',desc:'마을 이장에게 말을 걸어 의뢰를 받으세요.',area:'town',kind:'chief',count:0,total:1};
+ if(P.quest===0){const count=Math.min(10,P.bag['토끼 간']||0);return {title:'토끼 간 수집',desc:count>=10?'시작의 마을 이장에게 전달하세요.':'토끼 사냥터에서 토끼 간 10개를 모으세요.',area:count>=10?'town':'rabbit',kind:count>=10?'chief':'gate',count,total:10};}
+ const chain=[['jackalope','rabbit','사슴토끼 처치',300],['examiner','grave','전사의 자격 증명',450],['deerking','deer','사슴고원의 주인',600],['bucket','popcorn','극장 대청소',800],['captain','ship','함장의 퇴근 승인',1000],['iceking','ice','냉동실 문 열기',1500],['dragon','dragon','최고 사냥터의 끝',3000]];
+ const next=chain.find(([id])=>!P.claimedContracts.includes(id));if(!next)return {title:'모든 의뢰 완료',desc:'히든 전직과 스킬 융합으로 새 빌드를 완성하세요.',area:'town',count:1,total:1};
+ return {title:next[2],desc:monsterMap.get(next[0]).name+'을 쓰러뜨리세요. 보상 '+next[3]+'G',area:next[1],boss:next[0],reward:next[3],count:0,total:1};
+}
+const previousKill=killEnemy;
+killEnemy=function(e){const before=P.level;previousKill(e);if(e.data.boss&&!P.clearedBosses.includes(e.data.id))P.clearedBosses.push(e.data.id);if(P.level>before)toast('LEVEL UP · Lv.'+P.level+' / 체력·마나 회복');
+ if(e.data.id==='rabbit'&&P.quest===0&&(P.bag['토끼 간']||0)===10)toast('토끼 간 수집 완료! M으로 마을에 돌아가 이장에게 전달하세요.');
+ const o=objective();if(o.boss&&P.clearedBosses.includes(o.boss)){P.claimedContracts.push(o.boss);P.gold+=o.reward;gainXP(o.reward*.7);toast('의뢰 완료 · '+o.title+' / +'+o.reward+'G');audio(660,.25,'triangle',.05,1.5);save();}
+ if(e.data.boss){stamina=100;heal(maxHP()*.25);addItem('회복 포션');}
+};
+const previousInteract=interact;
+interact=function(){
+ const chest=lootNodes.find(n=>!n.opened&&n.pos.distanceTo(player.position)<2.5);
+ if(chest&&!nearestNPC){chest.opened=true;chest.node.rotation.z=.13;addItem('회복 포션');const gold=30+area.level*3;P.gold+=gold;burst(chest.pos,0xf3d48a,12);toast('보급 상자 · 회복 포션 +1 / '+gold+'G');save();return;}
+ if(nearestNPC?.kind==='gate'){openMap();return;}
+ if(nearestNPC?.kind==='chief'&&!P.questAccepted){P.questAccepted=true;modal='quest';setWindow('첫 의뢰: 토끼 간 10개','GUILD CONTRACT / 01',`<div class="notice">이장: “토끼 간 열 개만 구해주게. 건강검진 예약을 잡았거든.”<br>토끼 사냥터에서 토끼를 쓰러뜨리고 간을 모아 돌아오세요.<br><b>보상: 300G · 경험치 450 · 히든 직업 초 초보자</b></div><div class="row"><button class="primary" data-action="beginhunt">의뢰 수락 · 토끼 사냥터로</button><button data-action="close">마을 더 둘러보기</button></div>`);save();return;}
+ const old=P.quest;previousInteract();if(P.quest>old){toast('첫 의뢰 완료 · 초 초보자 해금! J에서 전직할 수 있습니다.');}
+};
+$('window').addEventListener('click',e=>{if(e.target.closest('[data-action="beginhunt"]')){closeModal();enterArea('rabbit');}});
+/* 연속 이동 회피: 순간이동 대신 충돌을 검사하며 이동합니다. */
+dodge=function(){if(!started||modal||mathPending||clock<dodgeCD||stamina<28||dashRemaining>0)return;stamina-=28;dodgeCD=clock+.55;dodgeTime=.31;dashRemaining=.28;dashVector.copy(move.lengthSq()>.01?move:aim).normalize();audio(210,.14,'triangle',.035,1.8);};
+let slashVisual=null;
+function aimAssist(range=9){const target=lockedTarget?.hp>0?lockedTarget:nearestEnemy(range);if(target&&target.g.position.distanceTo(player.position)<range){aim.copy(target.g.position).sub(player.position).setY(0).normalize();player.rotation.y=Math.atan2(-aim.x,-aim.z);}return target;}
+basicAttack=function(){
+ if(!started||modal||mathPending||attackCD>clock||dashRemaining>0)return;
+ aimAssist(['archer','mage','gunner','warlock'].includes(P.job)?15:4.2);
+ comboStep=clock-lastCombo<.9?(comboStep%3)+1:1;lastCombo=clock;comboUntil=clock+.8;
+ const finisher=comboStep===3;attackCD=clock+(finisher?.52:.29);
+ let power=attackPower()*(finisher?1.85:1);if(P.job==='lancer'&&nearestEnemy(1.8))power*=.4;
+ const c={pos:player.position.clone(),direction:aim.clone(),power,skill:{mult:1},scale:1};
+ if(['archer','mage','gunner','warlock'].includes(P.job))shoot(c,{speed:30});else{
+  const range=P.job==='lancer'?4.8:3;for(const e of enemies)if(e.hp>0&&facingEnemy(e,range))deal(e,power,finisher?{knock:1.2}:{});
+  const material=new THREE.MeshBasicMaterial({color:finisher?0xffdf9b:0xc3e5e2,transparent:true,opacity:.85,depthWrite:false,side:THREE.DoubleSide});
+  const slash=new THREE.Mesh(visualGeo.slash,material);slash.position.copy(player.position).add(V(0,.85,0));slash.rotation.set(Math.PI/2,0,-Math.atan2(aim.x,aim.z)+(comboStep===2?1:0));slash.scale.setScalar(finisher?2:1.6);fxRoot.add(slash);effects.push({node:slash,life:.19,max:.19,static:true,dispose:true});
+  weapon.rotation.x=finisher?-1.5:-.9;schedule(.17,()=>weapon.rotation.x=0);audio(finisher?155:240,.09,'triangle',.035,.6);
+ }
+ P.durability=Math.max(0,P.durability-.025);
+};
+const previousDamage=damagePlayer;
+damagePlayer=function(amount,source){if(clock<hurtUntil)return;const old=P.hp,epoch=worldEpoch;previousDamage(amount,source);if(P.hp<old&&epoch===worldEpoch)hurtUntil=clock+.45;};
+const previousUse=useSkill;
+useSkill=function(id){if(!modal&&!mathPending)aimAssist(16);previousUse(id);};
+const oldUpdatePlayer=updatePlayer;
+updatePlayer=function(dt){
+ const old=player.position.clone();oldUpdatePlayer(dt);
+ if(lockedTarget&&lockedTarget.hp<=0)lockedTarget=null;
+ if(lockedTarget&&lockedTarget.g.position.distanceTo(player.position)>22)lockedTarget=null;
+ if(lockedTarget)aimAssist(22);
+ if(dashRemaining>0){dashRemaining=Math.max(0,dashRemaining-dt);player.position.copy(old).addScaledVector(dashVector,dt*21);player.position.y=.1+Math.sin(dashRemaining/.28*Math.PI)*.22;player.rotation.z=Math.sin(dashRemaining/.28*Math.PI)*.16;footstepTimer-=dt;if(footstepTimer<=0){footstepTimer=.055;burst(player.position,0xaccdba,2);}}
+ else{player.rotation.z=0;stamina=Math.min(100,stamina+dt*25);}
+ resolveCollision(player.position);
+ if(move.lengthSq()>.1&&dashRemaining<=0){footstepTimer-=dt;if(footstepTimer<=0){footstepTimer=.27;const particle=mesh('sphere',0xa6ae8b,[player.position.x,.05,player.position.z],[.1,.06,.1],fxRoot);effects.push({node:particle,life:.25,max:.25,static:true});}}
+};
+const previousUpdateEnemies=updateEnemies;
+updateEnemies=function(dt){previousUpdateEnemies(dt);for(const e of enemies){resolveCollision(e.g.position,e.radius*.65);if(e.healthUI){e.healthUI.visible=e.hp<e.max||lockedTarget===e;e.healthUI.quaternion.copy(e.g.quaternion).invert().multiply(camera.quaternion);e.healthFill.scale.x=.9*Math.max(0,e.hp/e.max);e.healthFill.position.x=-(.9-e.healthFill.scale.x)/2;}if(e.state==='attack'&&e.ring.visible)e.ring.rotation.z+=dt*1.5;
+ for(const other of enemies){if(other.serial<=e.serial||other.hp<=0)continue;const d=e.g.position.clone().sub(other.g.position).setY(0),dist=d.length(),min=e.radius+other.radius;if(dist>0&&dist<min){d.normalize().multiplyScalar((min-dist)*.5);e.g.position.add(d);other.g.position.sub(d);}}
+ }};
+const previousUpdateFX=updateFX;
+updateFX=function(dt){for(const f of effects)if(f.dispose&&f.life-dt<=0)f.node.material.dispose();previousUpdateFX(dt);environmentClock+=dt;for(const a of ambients){if(a.kind==='crystal'){a.node.rotation.y+=dt*.5;a.node.position.y=a.baseY+Math.sin(environmentClock*1.5)*.15;}else a.node.rotation.z+=dt*.12;}
+ if(bannerTimer>0){bannerTimer-=dt;if(bannerTimer<=0)$('areaBanner').style.opacity='0';}if(toastTimer>0){toastTimer-=dt;if(toastTimer<=0)$('toast').style.opacity='0';}
+};
+updateCamera=function(dt){const target=player.position.clone().add(V(0,.8,0));const distance=started?19:26;const desired=target.clone().add(V(Math.sin(yaw)*Math.cos(pitch)*distance,Math.sin(pitch)*distance,Math.cos(yaw)*Math.cos(pitch)*distance));camera.position.lerp(desired,1-Math.exp(-dt*(started?10:2)));camera.lookAt(target);if(shake>0){camera.position.x+=rnd(-shake,shake);camera.position.y+=rnd(-shake,shake);shake=Math.max(0,shake-dt*2.5);}};
+function radar(){const c=$('radar').getContext('2d');c.clearRect(0,0,450,280);c.fillStyle='#142633';c.fillRect(0,0,450,280);const px=x=>225+x*5.4,pz=z=>135+z*3.5;c.strokeStyle='#59797c3f';c.lineWidth=1;for(let x=-30;x<=30;x+=10){c.beginPath();c.moveTo(px(x),25);c.lineTo(px(x),240);c.stroke();}for(let z=-30;z<=30;z+=10){c.beginPath();c.moveTo(60,pz(z));c.lineTo(390,pz(z));c.stroke();}c.strokeStyle='#b3ac7e44';c.lineWidth=11;c.beginPath();c.moveTo(px(0),pz(-30));c.lineTo(px(0),pz(30));c.moveTo(px(-30),pz(0));c.lineTo(px(30),pz(0));c.stroke();
+ function dot(pos,color,r){c.fillStyle=color;c.beginPath();c.arc(px(pos.x),pz(pos.z),r,0,Math.PI*2);c.fill();}
+ for(const n of npcs)dot(n.pos,n.kind==='chief'?'#f4d590':'#a3ceba',4);for(const e of enemies)dot(e.g.position,e.data.boss?'#ffb180':'#e68b91',e.data.boss?6:3);
+ const o=objective();if(o.area===area.id){const target=o.kind?npcMarkers.get(o.kind)?.pos:enemies.find(e=>e.data.id===o.boss)?.g.position;if(target){c.strokeStyle='#ffe2a7';c.lineWidth=2;c.beginPath();c.arc(px(target.x),pz(target.z),10+Math.sin(clock*3)*2,0,Math.PI*2);c.stroke();}}
+ dot(player.position,'#c4fff0',5);c.strokeStyle='#c4fff0';c.lineWidth=2;c.beginPath();c.moveTo(px(player.position.x),pz(player.position.z));c.lineTo(px(player.position.x+aim.x*2),pz(player.position.z+aim.z*2));c.stroke();
+}
+const previousHUD=updateHUD;
+updateHUD=function(){previousHUD();const o=objective();const questHTML=`<small style="color:#e4c78d">진행 중인 의뢰</small><br><b>${o.title}</b><br>${o.desc}<br><span class="muted">${o.total>1?o.count+' / '+o.total+' · ':''}목적지: ${DATA.areas.find(a=>a.id===o.area)?.name}</span><br><button id="objectiveGo" style="font-size:10px;margin-top:9px;padding:6px 10px">${o.area===area.id?'지도에서 위치 보기':'목적지로 이동'} ↗</button>`;
+ if($('questText').dataset.key!==questHTML){$('questText').dataset.key=questHTML;$('questText').innerHTML=questHTML;}
+ $('objectiveGo').onclick=()=>{if(o.area===area.id)openMap();else enterArea(o.area);};
+ $('staminaFill').style.width=stamina+'%';$('staminaText').textContent=Math.floor(stamina)+' / 100';$('combatHint').textContent=clock<comboUntil?comboStep+' / 3 연속 공격'+(comboStep===3?' · 마무리 타격!':' · 계속 공격하면 연계'):'좌클릭 연속 공격 · Space 회피 · Tab 대상 고정';
+ $('targetInfo').textContent=lockedTarget?'고정 대상 · '+lockedTarget.data.name+'　[Tab 해제]':'';
+ [...$('skillbar').children].forEach((node,i)=>{const s=skillMap.get(P.slots[i]);node.classList.toggle('noMana',!!s&&P.mp<s.mp);});
+ const chest=lootNodes.find(n=>!n.opened&&n.pos.distanceTo(player.position)<2.5);if(chest&&!nearestNPC&&!modal){$('prompt').style.display='block';$('prompt').textContent='[E] 보급 상자 열기';}radar();
+};
+addEventListener('keydown',e=>{if(e.target instanceof HTMLInputElement||e.target instanceof HTMLSelectElement||!started||modal||mathPending)return;if(e.key==='Tab'){e.preventDefault();lockedTarget=lockedTarget?null:nearestEnemy(18);}if(e.key.toLowerCase()==='q'&&clock>(buffs.potionCD?.until||0)){if(spendItem('회복 포션',1)){heal(maxHP()*.55);buff('potionCD',5);audio(680,.18,'sine',.04,1.3);toast('회복 포션 사용 · HP 55% 회복');}else toast('회복 포션이 없습니다. 마을 잡화 상인을 찾아가세요.');}});
+$('radarOpen').onclick=openMap;
+for(const [id,handler]of[['navSkills',()=>openSkills('owned')],['navJobs',openJobs],['navBag',openInventory],['navMenu',openMenu]])$(id).onclick=handler;
+$('startButton').textContent=P.playtime>10?'모험 이어가기　→':'길드에 등록하기　→';
+let starterChoice='warrior';
+for(const b of document.querySelectorAll('[data-starter]'))b.onclick=()=>{starterChoice=b.dataset.starter;document.querySelectorAll('[data-starter]').forEach(n=>n.classList.toggle('selected',n===b));};
+const originalStart=$('startButton').onclick;
+$('startButton').onclick=()=>{
+ const fresh=P.playtime<10&&P.job==='novice'&&P.kills===0;
+ if(fresh){P.job=starterChoice;P.history.push(starterChoice);P.unlocked.push(starterChoice);const starter=DATA.skills.filter(s=>s.job===starterChoice).slice(0,4);P.learned=[...new Set([...P.learned,...starter.map(s=>s.id)])];P.slots=starter.map(s=>s.id);while(P.slots.length<8)P.slots.push(null);P.hp=maxHP();P.mp=maxMP();buildPlayer();}
+ originalStart();yaw=0;pitch=.9;camera.position.copy(player.position).add(V(0,15,12));toast(P.questAccepted?'의뢰를 이어가세요. 오른쪽 목표 버튼으로 목적지에 이동할 수 있습니다.':'금색 표식의 마을 이장에게 가까이 가서 E를 누르세요.');
+};
+if(P.playtime>10)$('classChoices').style.display='none';
+/* 화면에서 목적지가 보이도록 시야를 약간 앞쪽으로 둡니다. */
+const cinematicCamera=updateCamera;
+updateCamera=function(dt){const target=player.position.clone().add(V(0,.7,-2.4)),distance=started?25:30;const desired=target.clone().add(V(Math.sin(yaw)*Math.cos(pitch)*distance,Math.sin(pitch)*distance,Math.cos(yaw)*Math.cos(pitch)*distance));camera.position.lerp(desired,1-Math.exp(-dt*(started?9:2)));camera.lookAt(target);if(shake>0){camera.position.x+=rnd(-shake,shake);camera.position.y+=rnd(-shake,shake);shake=Math.max(0,shake-dt*2.5);}};
+const decorateWorld=newWorld;
+newWorld=function(){decorateWorld();if(area.id!=='town'){
+ for(const [x,z]of[[-11,9],[11,3],[-10,-7],[12,-12]]){
+  mesh('box',0x635d4e,[x+2,.35,z+2],[1.1,.7,.8]);mesh('box',0x9b8f6f,[x+2,.73,z+2],[1.12,.07,.82]);
+  mesh('cylinder',0x6a6553,[x-2,1.15,z-2],[.07,2.3,.07]);mesh('box',area.id==='rabbit'?0xbf8f6d:0x9a9bb3,[x-1.6,2,z-2],[.8,.6,.06]);
+  for(let i=0;i<4;i++){const rock=mesh('sphere',0x969c86,[x+Math.sin(i*2)*2.6,.16,z+Math.cos(i*2)*2.6],[.35,.18,.3]);rock.rotation.y=i;}
+ }
+ }
+ const colors=area.id==='ice'?[0xd4edf0,0xb9dce9]:[0xb1b47a,0xc9b38c];
+ const flowers=new THREE.InstancedMesh(geo.sphere,mat(colors[0]),70),dummy=new THREE.Object3D();
+ for(let i=0;i<70;i++){const x=(deterministic(i+900)-.5)*56,z=(deterministic(i+1000)-.5)*56;dummy.position.set(x,Math.abs(x)<5||Math.abs(z)<4?-2:.2,z);dummy.scale.set(.12,.18,.12);dummy.updateMatrix();flowers.setMatrixAt(i,dummy.matrix);}world.add(flowers);
+};
+/* NPC를 표식 기둥 대신 인물과 실제 안내석으로 구분합니다. */
+const legacyAddNPC=addNPC;
+addNPC=function(name,x,z,color,kind){legacyAddNPC(name,x,z,color,kind);const n=npcs[npcs.length-1],g=n.g;clearGroup(g);
+ if(['return','gate','empty'].includes(kind)){mesh('box',0x677e7e,[0,.7,0],[.65,1.4,.45],g);mesh('box',0xd5be81,[0,1.4,0],[1.2,.6,.15],g);const glyph=mesh('cone',0xb7e5cf,[0,2.1,0],[.25,.6,.25],g,true);glyph.rotation.z=Math.PI;return;}
+ g.rotation.y=Math.PI;
+ for(const side of[-1,1]){mesh('box',0x3e4c53,[side*.16,.32,0],[.23,.64,.28],g);mesh('box',color,[side*.41,1,0],[.19,.6,.22],g);mesh('sphere',0xe3c5a2,[side*.41,.68,0],[.12,.12,.12],g);}
+ mesh('box',color,[0,1,0],[.65,.73,.4],g);mesh('box',0x6d6550,[0,.75,-.23],[.66,.09,.06],g);mesh('sphere',0xe4c6a0,[0,1.62,0],[.27,.3,.26],g);mesh('sphere',kind==='chief'?0xc4bba5:0x49545b,[0,1.83,.04],[.28,.14,.25],g);
+ for(const side of[-1,1])mesh('box',0x25373f,[side*.095,1.65,-.245],[.045,.045,.02],g);
+ if(kind==='chief')mesh('cone',0xe1d7bb,[0,1.39,-.19],[.15,.22,.1],g).rotation.z=Math.PI;
+ if(kind==='trainer')mesh('box',0xe0d2ae,[.48,1,-.1],[.08,.08,1.3],g);
+};
+const protectedEnter=enterArea;
+enterArea=function(id){for(const f of effects)if(f.dispose)f.node.material.dispose();world.traverse(n=>{if(n.userData.disposableMaterial)n.material.dispose();});comboUntil=0;protectedEnter(id);};
+
 window.HWANJANG={DATA,get player(){return P;},get area(){return area;}};
 enterArea('town');camera.position.set(12,16,19);requestAnimationFrame(frame);
 </script>
